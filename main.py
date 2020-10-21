@@ -1,6 +1,8 @@
 import discord
 import os
 
+from src.commands import execCommand
+
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -10,8 +12,8 @@ class MyClient(discord.Client):
 
     async def on_message(self, message):
         print('Message from {0.author}: {0.content}'.format(message))
-        if str(message.author) != "Bert#4668":
-            await message.channel.send('Lu')
+        if message.content and message.content[0] == "/":
+            await execCommand(message.content[1:], message.channel)
 
 
 API_KEY = os.environ.get("API_KEY", "")
