@@ -6,7 +6,6 @@ class Reminder(object):
         self.id = None
         self.name = name
         self.time = time
-        self.desc = desc
 
     def isNow(self):
         return False
@@ -16,6 +15,5 @@ class Reminder(object):
         return json.dumps({
             "ID": self.id,
             "Name": self.name,
-            "Time": self.time,
-            "Desc": self.desc}
-        )
+            "Time": self.time
+        })

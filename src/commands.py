@@ -1,5 +1,7 @@
 async def addReminder(parameters, channel):
-    print("adding event")
+    date = parameters[0]
+    name = parameters[1]
+    print("Event : date {} \n name {}\n".format(date, name))
 
 
 async def delReminder(parameters, channel):
