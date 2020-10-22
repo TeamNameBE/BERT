@@ -1,6 +1,10 @@
+from db.models import Reminder
+
+
 async def addReminder(parameters, channel):
     date = parameters[0]
     name = parameters[1]
+    Reminder.objects.create(name=name)
     print("Event : date {} \n name {}\n".format(date, name))
 
 

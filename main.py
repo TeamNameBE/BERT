@@ -1,7 +1,13 @@
 import discord
 import os
+import django
+
+# Django specific settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+django.setup()
 
 from src.commands import execCommand
+from src.cog import ReminderCog
 
 
 class MyClient(discord.Client):
@@ -21,4 +27,6 @@ if API_KEY == "":
     raise Exception("You must specify an API key")
 
 client = MyClient()
+cog = ReminderCog(client)
+
 client.run(API_KEY)
