@@ -1,16 +1,18 @@
 import json
 
 from django.db import models
+from django.utils import timezone
 
 
 class Reminder(models.Model):
-    def __init__(self, time, name, desc):
-        self.name = models.CharField(max_length=150)
-        self.time = models.DateTimeField(null=True)
+    name = models.CharField(max_length=150, default="none")
+    start_time = models.DateTimeField(null=True)
+    duration = models.TimeField(null=True)
+    role_to_remind = models.CharField(max_length=150, null=True)
 
     @property
     def isNow(self):
-        return False
+        return timezone.now() >= self.start_time
 
     @property
     def serialized(self):
