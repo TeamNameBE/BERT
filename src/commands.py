@@ -1,22 +1,84 @@
 from db.models import Reminder
+from datetime import datetime
+from asgiref.sync import sync_to_async
 
 
-async def addReminder(parameters, channel):
-    date = parameters[0]
-    name = parameters[1]
-    Reminder.objects.create(name=name)
-    print("Event : date {} \n name {}\n".format(date, name))
+def createReminder(name, start_time, duration, cog=None):
+    Reminder.objects.create(
+        name=name, start_time=start_time, duration=duration)
+    return Reminder.objects.last().pk
 
 
-async def delReminder(parameters, channel):
+async def addReminder(parameters, channel, cog=None):
+    if len(parameters) < 3:
+        channel.send("La commande n'est pas correcte fdp")
+
+    start_time = datetime.strptime(
+        "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M")
+    name = parameters[2]
+    duration = datetime.strptime(
+        parameters[3], "%H:%M")
+
+    pk = await sync_to_async(createReminder)(name, start_time, duration)
+    await channel.send(
+        "J'ai ajouté l'évenement {} le {} (pk: {})".format(
+            name, start_time.strftime("%d/%m/%y à %H:%M"), pk))
+
+
+async def delReminder(parameters, channel, cog=None):
     print("delete event")
 
 
-async def modReminder(parameters, channel):
+async def modReminder(parameters, channel, cog=None):
     print("modifying event")
 
+async def deathping(parameters, channel, cog=None):
+    uid = parameters[0][2:-1]
+    if uid[0] == "!":
+        uid = uid[1:]
+    await channel.send("Gonna ping the shit out of <@!{}>".format(uid))
+    cog.toBePinged.append((uid, channel.id))
 
-async def morsty(parameters, channel):
+async def stopDeathping(parameters, channel, cog=None):
+    uid = parameters[0][2:-1]
+    if uid[0] == "!":
+        uid = uid[1:]
+    await channel.send("Stopping to ping the shit out of <@!{}>".format(uid))
+    for item in [item for item in cog.toBePinged if uid in item]:
+        del cog.toBePinged[cog.toBePinged.index(item)]
+
+def getFutureEvents(name, value, cog=None):
+    if name == "hours":
+        Reminder.objects.filter(
+            start_time__range=[
+                datetime.now(),
+                datetime.now() + datetime.timedelta(hour=value)]
+        )
+    if name == "days":
+        Reminder.objects.filter(
+            start_time__range=[
+                datetime.now(),
+                datetime.now() + datetime.timedelta(day=value)]
+        )
+    if name == "month":
+        Reminder.objects.filter(
+            start_time__range=[
+                datetime.now(),
+                datetime.now() + datetime.timedelta(month=value)]
+        )
+    if name == "year":
+        Reminder.objects.filter(
+            start_time__range=[
+                datetime.now(),
+                datetime.now() + datetime.timedelta(year=value)]
+        )
+
+
+async def getFuture(parameters, channel, cog=None):
+    pass
+
+
+async def morsty(parameters, channel, cog=None):
     await channel.send("""```
                ___
             .-9 9 `\\     Is it
@@ -36,18 +98,33 @@ async def morsty(parameters, channel):
 ```""")
 
 
+async def hjelp(parameters, channel, cog=None):
+    await channel.send(
+        """```
+/addreminder date(jj/mm/yyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)
+/delreminder id : deletes a reminder
+/modreminder id parameter(nom|start_date|duration) value : modifies a reminder
+/getfuture [hour|days|months|year] value : shows the future events until X [days|...]
+/help : this message
+```""")
+
+
 commands = {
     'addreminder': addReminder,
     'delreminder': delReminder,
     'modreminder': modReminder,
+    'getfuture': getFuture,
     'morsty': morsty,
+    'deathping': deathping,
+    'stopping': stopDeathping,
+    'help': hjelp,
 }
 
 
-async def execCommand(line, channel):
+async def execCommand(line, channel, cog):
     parameters = line.split(" ")
     if parameters[0] not in commands.keys():
         await channel.send("Bert pas connaitre `{}`".format(parameters[0]))
         return
     else:
-        await commands[parameters[0]](parameters[1:], channel)
+        await commands[parameters[0]](parameters[1:], channel, cog)

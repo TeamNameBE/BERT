@@ -13,13 +13,13 @@ from src.cog import ReminderCog
 class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
-        # channel = client.get_channel(755154529401438344)
-        # await channel.send('Hello')
+        # channel = client.get_channel(776392028598304798)
+        # await channel.send('<@&{}> up'.format(389427227785428992))
 
     async def on_message(self, message):
         # print('Message from {0.author}: {0.content}'.format(message))
         if message.content and message.content[0] == "/":
-            await execCommand(message.content[1:], message.channel)
+            await execCommand(message.content[1:], message.channel, cog)
 
 
 API_KEY = os.environ.get("API_KEY", "")
