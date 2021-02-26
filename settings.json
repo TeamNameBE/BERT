@@ -1,0 +1,9 @@
+{
+  "help": {
+    "/addreminder": "date(jj/mm/yyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)\n creates a reminder at the given date that concerns the mentionned role/user",
+    "/delreminder": "id\n deletes an reminder",
+    "/modreminder": "id parameter(nom|start_date|duration) new_value\n : Modifies the given field of an reminder",
+    "/getfuture": "[hour|days|months|year] value\n - Returns the reminders until the given date (defaults to nex week)",
+    "/help": "[command] : displays this message"
+  }
+}
