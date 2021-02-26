@@ -1,5 +1,3 @@
-import json
-
 from django.db import models
 from django.utils import timezone
 
@@ -9,6 +7,7 @@ class Reminder(models.Model):
     start_time = models.DateTimeField(null=True)
     duration = models.TimeField(null=True)
     guild = models.IntegerField(default=0)
+    channel = models.IntegerField(default=0)
     role_to_remind = models.TextField(null=True)
 
     @property
@@ -17,4 +16,10 @@ class Reminder(models.Model):
 
     @property
     def serialized(self):
-        return json.dumps({"ID": self.id, "Name": self.name, "Time": self.time})
+        return {
+            "ID": self.id,
+            "name": self.name,
+            "start_time": self.start_time,
+            "roles": self.role_to_remind,
+            "duration": self.duration,
+        }
