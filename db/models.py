@@ -31,4 +31,8 @@ class Reminder(models.Model):
 
     async def advertise(self, guild):
         channel = guild.get_channel(self.channel)
-        await channel.send(f"I'm advertising reminder {self.name}")
+        await channel.send(
+            f"Salut {self.role_to_remind} ! C'est le moment pour {self.name} durant {self.duration} !"
+        )
+        if self.dp_participants:
+            await channel.send(f"/deathping {self.role_to_remind}")
