@@ -3,8 +3,8 @@
     "/addreminder": "date(jj/mm/yyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)\n    creates a reminder at the given date that concerns the mentionned role/user",
     "/delreminder": "name\n    deletes a reminder",
     "/modreminder": "name parameter(nom|start_date|duration) new_value\n    Modifies the given field of a reminder",
-    "/getfuture": "[hour|days|months|year] value\n    Returns the reminders until the given date (defaults to next week)",
+    "/getfuture": "[hours|days|weeks] value\n    Returns the reminders until the given date (defaults to next week)",
     "/help": "[command]\n    displays help message about the specified command, or about every command",
-    "/mortsy": "\n    ? ? ?"
+    "/morsty": "\n    ? ? ?"
   }
 }
