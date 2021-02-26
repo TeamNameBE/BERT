@@ -4,6 +4,7 @@
     "/delreminder": "name\n    deletes a reminder",
     "/modreminder": "name parameter(nom|start_date|duration) new_value\n    Modifies the given field of a reminder",
     "/getfuture": "[hour|days|months|year] value\n    Returns the reminders until the given date (defaults to next week)",
-    "/help": "[command]\n    displays help message about the specified command, or about every command"
+    "/help": "[command]\n    displays help message about the specified command, or about every command",
+    "/mortsy": "\n    ? ? ?"
   }
 }
