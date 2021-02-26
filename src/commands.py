@@ -2,7 +2,7 @@ from db.models import Reminder
 from datetime import datetime
 from asgiref.sync import sync_to_async
 
-from src.utils import createReminder
+from src.utils import createReminder, deleteReminder
 
 
 

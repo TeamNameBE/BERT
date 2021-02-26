@@ -22,7 +22,7 @@ def modReminder(name, server_id, field, value):
     }
 
 
-def delReminder(name, server_id):
+def deleteReminder(name, server_id):
     reminder = Reminder.objects.filter(name=name, guild=server_id)
     if reminder.count() == 0:
         return {"error": True, "msg": f"Bert a pas trouvé événement '{name}'"}
