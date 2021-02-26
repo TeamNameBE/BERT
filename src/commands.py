@@ -1,3 +1,5 @@
+import json
+
 from db.models import Reminder
 from datetime import datetime
 from asgiref.sync import sync_to_async
@@ -12,11 +14,18 @@ async def addReminder(parameters, channel, cog=None):
     )
     name = parameters[2]
     duration = datetime.strptime(parameters[3], "%H:%M")
+    people_to_remind = ", ".join(parameters[4:])
 
-    await sync_to_async(createReminder)(name, start_time, duration, channel.guild.id)
+    await sync_to_async(createReminder)(
+        name=name,
+        start_time=start_time,
+        duration=duration,
+        people_to_remind=people_to_remind,
+        server_id=channel.guild.id,
+    )
     await channel.send(
-        "Bert a ajouté l'évenement {} le {}".format(
-            name, start_time.strftime("%d/%m/%y à %H:%M")
+        "Bert a ajouté l'évenement **{}** le **{}** (pour {})".format(
+            name, start_time.strftime("%d/%m/%y à %H:%M"), people_to_remind
         )
     )
 

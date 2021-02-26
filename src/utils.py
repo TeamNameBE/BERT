@@ -1,9 +1,13 @@
 from db.models import Reminder
 
 
-def createReminder(name, start_time, duration, server_id):
+def createReminder(name, start_time, duration, people_to_remind, server_id):
     Reminder.objects.create(
-        name=name, start_time=start_time, duration=duration, guild=server_id
+        name=name,
+        start_time=start_time,
+        duration=duration,
+        role_to_remind=people_to_remind,
+        guild=server_id,
     )
 
 
