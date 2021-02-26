@@ -22,6 +22,7 @@ async def addReminder(parameters, channel, cog=None):
         start_time=start_time,
         duration=duration,
         people_to_remind=people_to_remind,
+        channel_id=channel.id,
         server_id=channel.guild.id,
     )
     await channel.send(
