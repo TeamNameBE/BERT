@@ -5,9 +5,10 @@ from datetime import datetime
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder
+from src.decorators import requires_paramaters
 
 
-
+@requires_paramaters(nb_parameters=5)
 async def addReminder(parameters, channel, cog=None):
     start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
@@ -30,6 +31,7 @@ async def addReminder(parameters, channel, cog=None):
     )
 
 
+@requires_paramaters
 async def delReminder(parameters, channel, cog=None):
     name = parameters[0]
 
@@ -37,9 +39,12 @@ async def delReminder(parameters, channel, cog=None):
     await channel.send(result["msg"])
 
 
+@requires_paramaters(nb_parameters=3)
 async def modReminder(parameters, channel, cog=None):
     print("modifying event")
 
+
+@requires_paramaters
 async def deathping(parameters, channel, cog=None):
     print(channel.guild.id)
     uid = parameters[0]
@@ -47,6 +52,7 @@ async def deathping(parameters, channel, cog=None):
     cog.toBePinged.append((uid, channel.id))
 
 
+@requires_paramaters
 async def stopDeathping(parameters, channel, cog=None):
     uid = parameters[0]
     for item in [item for item in cog.toBePinged if uid in item]:
