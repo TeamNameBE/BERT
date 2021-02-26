@@ -22,7 +22,10 @@ async def addReminder(parameters, channel, cog=None):
 
 
 async def delReminder(parameters, channel, cog=None):
-    print("delete event")
+    name = parameters[0]
+
+    result = sync_to_async(deleteReminder)(name, channel.guild.id)
+    await channel.send(result["msg"])
 
 
 async def modReminder(parameters, channel, cog=None):
