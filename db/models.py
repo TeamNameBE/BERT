@@ -9,10 +9,12 @@ class Reminder(models.Model):
     guild = models.IntegerField(default=0)
     channel = models.IntegerField(default=0)
     role_to_remind = models.TextField(null=True)
+    advertised = models.BooleanField(default=False)
+    dp_participants = models.BooleanField(default=False)
 
     @property
     def isNow(self):
-        return timezone.now() >= self.start_time
+        return (timezone.now() >= self.start_time) and not self.advertised
 
     @property
     def serialized(self):
@@ -23,3 +25,10 @@ class Reminder(models.Model):
             "roles": self.role_to_remind,
             "duration": self.duration,
         }
+
+    def __repr__(self):
+        return f"Reminder {self.name} (advertised: {self.advertised})"
+
+    async def advertise(self, guild):
+        channel = guild.get_channel(self.channel)
+        await channel.send(f"I'm advertising reminder {self.name}")
