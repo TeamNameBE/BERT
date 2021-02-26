@@ -60,6 +60,14 @@ def modifyReminder(name, server_id, field, value, cog):
         else:
             old_value = f"<#{reminder.channel}>"
             reminder.channel = value[2:-1]
+
+    elif field == "allow_dp":
+        value = value.lower()
+        if value not in ["true", "false"]:
+            return {"error": True, "msg": f"Toi choisir 'true' ou 'false', pas {value}"}
+        old_value = "true" if reminder.dp_participants else "false"
+        reminder.dp_participants = True if value == "true" else "false"
+
     else:
         return {"error": True, "msg": f"Bert pas connaitre champs {field}"}
 
