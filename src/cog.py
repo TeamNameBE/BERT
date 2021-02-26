@@ -31,7 +31,7 @@ class ReminderCog(commands.Cog):
             await self.bot.wait_until_ready()
             for pinged, channel in self.toBePinged:
                 channel = self.bot.get_channel(channel)
-                await channel.send('<@!{}> up'.format(pinged))
+                await channel.send("{} up".format(pinged))
 
     @tasks.loop(seconds=2.0)
     async def getEvent(self):
@@ -41,7 +41,7 @@ class ReminderCog(commands.Cog):
         """ Loads every event that starts in less than 5 minutes """
         self.near_events = Reminder.objects.filter(
             start_time__gte=timezone.now(),
-            start_time__lt=timezone.now() + timezone.timedelta(minutes=5)
+            start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
         )
 
     @tasks.loop(seconds=5.0)

@@ -33,19 +33,20 @@ async def modReminder(parameters, channel, cog=None):
     print("modifying event")
 
 async def deathping(parameters, channel, cog=None):
-    uid = parameters[0][2:-1]
-    if uid[0] == "!":
-        uid = uid[1:]
-    await channel.send("Gonna ping the shit out of <@!{}>".format(uid))
+    print(channel.guild.id)
+    uid = parameters[0]
+    await channel.send(f"Gonna ping the shit out of {uid}")
     cog.toBePinged.append((uid, channel.id))
 
+
 async def stopDeathping(parameters, channel, cog=None):
-    uid = parameters[0][2:-1]
-    if uid[0] == "!":
-        uid = uid[1:]
-    await channel.send("Stopping to ping the shit out of <@!{}>".format(uid))
+    uid = parameters[0]
     for item in [item for item in cog.toBePinged if uid in item]:
         del cog.toBePinged[cog.toBePinged.index(item)]
+        await channel.send(f"Stopping to ping the shit out of {uid}")
+        return
+    await channel.send(f"{uid} is not in the list of person to deathing")
+
 
 def getFutureEvents(name, value, cog=None):
     if name == "hours":
