@@ -107,17 +107,17 @@ async def morsty(parameters, channel, cog=None):
 async def hjelp(parameters, channel, cog=None):
     settings = json.load(open("settings.json"))
 
-    if len(parameters) > 1:
+    if len(parameters) >= 1:
         for command in parameters:
             command = f"/{command}"
-            if parameters[0] in settings["help"].keys():
-                await channel.send(f"{command}: {settings['help'][command]}")
+            if command in settings["help"].keys():
+                await channel.send(f"```{command}: {settings['help'][command]}```")
             else:
-                await channel.send(f"Commande {command} pas dans aide de bert")
+                await channel.send(f"Commande '{command}' pas dans aide de bert")
     else:
         help_msg = "```"
-        for command, help_text in settings["help"].values():
-            help_msg += f"{command}: {help_text}"
+        for command, help_text in settings["help"].items():
+            help_msg += f"{command}: {help_text}\n\n"
         help_msg += "```"
         await channel.send(help_msg)
 
