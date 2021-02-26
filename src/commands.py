@@ -1,11 +1,17 @@
 import json
 
-from db.models import Reminder
 from datetime import datetime
 from asgiref.sync import sync_to_async
 
-from src.utils import createReminder, deleteReminder, getFutureEvents
+from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
 from src.decorators import requires_paramaters
+
+
+async def displayResult(channel, result):
+    if result["error"]:
+        await channel.send(f"**{result['msg']}**")
+    else:
+        await channel.send(result["msg"])
 
 
 @requires_paramaters(nb_parameters=5)
@@ -13,7 +19,7 @@ async def addReminder(parameters, channel, cog=None):
     start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
     )
-    name = parameters[2]
+    name = parameters[2].lower()
     duration = datetime.strptime(parameters[3], "%H:%M")
     people_to_remind = ", ".join(parameters[4:])
 
@@ -37,12 +43,20 @@ async def delReminder(parameters, channel, cog=None):
     name = parameters[0]
 
     result = await sync_to_async(deleteReminder)(name, channel.guild.id)
-    await channel.send(result["msg"])
+    await displayResult(channel, result)
 
 
 @requires_paramaters(nb_parameters=3)
 async def modReminder(parameters, channel, cog=None):
-    print("modifying event")
+    name = parameters[0]
+    guild_id = channel.guild.id
+    field = parameters[1]
+    value = " ".join(parameters[2:])
+
+    result = await sync_to_async(modifyReminder)(
+        name=name, server_id=guild_id, field=field, value=value, cog=cog
+    )
+    await displayResult(channel, result)
 
 
 @requires_paramaters
@@ -85,6 +99,8 @@ async def getFuture(parameters, channel, cog=None):
         await channel.send(
             f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}```"
         )
+    if len(future_events) == 0:
+        await channel.send("Bert a pas trouvé événements dans période donnée")
 
 
 async def morsty(parameters, channel, cog=None):
