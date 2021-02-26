@@ -2,11 +2,8 @@ from db.models import Reminder
 from datetime import datetime
 from asgiref.sync import sync_to_async
 
+from src.utils import createReminder
 
-def createReminder(name, start_time, duration, cog=None):
-    Reminder.objects.create(
-        name=name, start_time=start_time, duration=duration)
-    return Reminder.objects.last().pk
 
 
 async def addReminder(parameters, channel, cog=None):
@@ -14,13 +11,14 @@ async def addReminder(parameters, channel, cog=None):
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
     )
     name = parameters[2]
-    duration = datetime.strptime(
-        parameters[3], "%H:%M")
+    duration = datetime.strptime(parameters[3], "%H:%M")
 
-    pk = await sync_to_async(createReminder)(name, start_time, duration)
+    await sync_to_async(createReminder)(name, start_time, duration, channel.guild.id)
     await channel.send(
-        "J'ai ajouté l'évenement {} le {} (pk: {})".format(
-            name, start_time.strftime("%d/%m/%y à %H:%M"), pk))
+        "Bert a ajouté l'évenement {} le {}".format(
+            name, start_time.strftime("%d/%m/%y à %H:%M")
+        )
+    )
 
 
 async def delReminder(parameters, channel, cog=None):
