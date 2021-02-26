@@ -48,21 +48,23 @@ async def modReminder(parameters, channel, cog=None):
 async def deathping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
-        await channel.send(f"Gonna ping the shit out of {uid}")
-        cog.toBePinged.append((uid, channel.id))
+        if uid.startswith("<") and uid.endswith(">"):
+            await channel.send(f"Gonna ping the shit out of {uid}")
+            cog.toBePinged.append((uid, channel.id))
 
 
 @requires_paramaters
 async def stopDeathping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
-        if (uid, channel.id) in cog.toBePinged:
-            del cog.toBePinged[cog.toBePinged.index((uid, channel.id))]
-            await channel.send(f"Stopping to ping the shit out of {uid}")
-        else:
-            await channel.send(
-                f"{uid} is not in the list of person to deathing in this channel"
-            )
+        if uid.startswith("<") and uid.endswith(">"):
+            if (uid, channel.id) in cog.toBePinged:
+                del cog.toBePinged[cog.toBePinged.index((uid, channel.id))]
+                await channel.send(f"Stopping to ping the shit out of {uid}")
+            else:
+                await channel.send(
+                    f"{uid} is not in the list of person to deathing in this channel"
+                )
 
 
 def getFutureEvents(name, value, cog=None):
@@ -153,7 +155,9 @@ commands = {
 
 
 async def execCommand(line, channel, cog):
-    parameters = line.split(" ")
+    parameters = (
+        line.replace("\n", " ").replace("\r", " ").replace("\t", " ").split(" ")
+    )
     if parameters[0] not in commands.keys():
         await channel.send("Bert pas connaitre `{}`".format(parameters[0]))
         return
