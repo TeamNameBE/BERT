@@ -1,5 +1,6 @@
 import datetime
 
+from django.utils import timezone
 from db.models import Reminder
 
 
@@ -108,3 +109,12 @@ def getFutureEvents(name, value, guild):
     reminders = reminders.filter(guild=guild)
 
     return [reminder.serialized for reminder in reminders]
+
+
+def loadNearFutureEvents():
+    """ Loads every event that starts in less than 5 minutes """
+    return Reminder.objects.filter(
+        start_time__gte=timezone.now() - timezone.timedelta(minutes=5),
+        start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
+        advertised=False,
+    )

@@ -1,7 +1,8 @@
 from django.utils import timezone
 from discord.ext import tasks, commands
-from db.models import Reminder
 from asgiref.sync import sync_to_async
+
+from src.utils import loadNearFutureEvents
 
 
 class ReminderCog(commands.Cog):
@@ -12,17 +13,18 @@ class ReminderCog(commands.Cog):
         self.getEvent.start()
         self.pinger.start()
         self.toBePinged = []
-        self.near_events = []
+        self.near_events = loadNearFutureEvents()
 
     def cog_unload(self):
         self.loader.cancel()
 
     def getLoadedEvents(self):
-        loadedEvents = self.near_events.filter(start_time__gte=timezone.now())
         events_to_return = []
-        for event in loadedEvents:
+        for event in self.near_events:
             if event.isNow:
-                events_to_return.append(event)
+                events_to_return.append((event, event.guild))
+                event.advertised = True
+                event.save()
         return events_to_return
 
     @tasks.loop(seconds=2.0)
@@ -35,15 +37,10 @@ class ReminderCog(commands.Cog):
 
     @tasks.loop(seconds=2.0)
     async def getEvent(self):
-        return await sync_to_async(self.getLoadedEvents)()
+        events = await sync_to_async(self.getLoadedEvents)()
+        for event, guild in events:
+            await event.advertise(self.bot.get_guild(guild))
 
-    def loadEvents(self):
-        """ Loads every event that starts in less than 5 minutes """
-        self.near_events = Reminder.objects.filter(
-            start_time__gte=timezone.now(),
-            start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
-        )
-
-    @tasks.loop(seconds=5.0)
+    @tasks.loop(seconds=30.0)
     async def loader(self):
-        await sync_to_async(self.loadEvents)()
+        self.near_events = await sync_to_async(loadNearFutureEvents)()
