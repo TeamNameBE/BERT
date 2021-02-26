@@ -1,3 +1,5 @@
+import datetime
+
 from db.models import Reminder
 
 
@@ -34,3 +36,33 @@ def deleteReminder(name, server_id):
     reminder = reminder.first()
     reminder.delete()
     return {"error": False, "msg": f"Bert a supprimé événement '{name}'"}
+
+
+def getFutureEvents(name, value, guild):
+    if name == "hours":
+        reminders = Reminder.objects.filter(
+            start_time__range=[
+                datetime.datetime.now(),
+                datetime.datetime.now() + datetime.timedelta(hours=value),
+            ]
+        ).order_by("start_time")
+    elif name == "days":
+        reminders = Reminder.objects.filter(
+            start_time__range=[
+                datetime.datetime.now(),
+                datetime.datetime.now() + datetime.timedelta(days=value),
+            ]
+        ).order_by("start_time")
+    elif name == "week":
+        reminders = Reminder.objects.filter(
+            start_time__range=[
+                datetime.datetime.now(),
+                datetime.datetime.now() + datetime.timedelta(weeks=value),
+            ]
+        ).order_by("start_time")
+    else:
+        return Reminder.objects.none()
+
+    reminders = reminders.filter(guild=guild)
+
+    return [reminder.serialized for reminder in reminders]

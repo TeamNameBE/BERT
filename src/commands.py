@@ -4,7 +4,7 @@ from db.models import Reminder
 from datetime import datetime
 from asgiref.sync import sync_to_async
 
-from src.utils import createReminder, deleteReminder
+from src.utils import createReminder, deleteReminder, getFutureEvents
 from src.decorators import requires_paramaters
 
 
@@ -67,39 +67,23 @@ async def stopDeathping(parameters, channel, cog=None):
                 )
 
 
-def getFutureEvents(name, value, cog=None):
-    if name == "hours":
-        Reminder.objects.filter(
-            start_time__range=[
-                datetime.now(),
-                datetime.now() + datetime.timedelta(hour=value),
-            ]
-        )
-    if name == "days":
-        Reminder.objects.filter(
-            start_time__range=[
-                datetime.now(),
-                datetime.now() + datetime.timedelta(day=value),
-            ]
-        )
-    if name == "month":
-        Reminder.objects.filter(
-            start_time__range=[
-                datetime.now(),
-                datetime.now() + datetime.timedelta(month=value),
-            ]
-        )
-    if name == "year":
-        Reminder.objects.filter(
-            start_time__range=[
-                datetime.now(),
-                datetime.now() + datetime.timedelta(year=value),
-            ]
-        )
-
-
 async def getFuture(parameters, channel, cog=None):
-    pass
+    if len(parameters) == 0:
+        field = "days"
+        value = "7"
+    else:
+        field = parameters[0]
+        value = parameters[1]
+    if not value.isdigit():
+        await channel.send(f"La valeur {value} doit être chiffre")
+    value = int(value)
+    future_events = await sync_to_async(getFutureEvents)(
+        name=field, value=value, guild=channel.guild.id
+    )
+    for event in future_events:
+        await channel.send(
+            f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}```"
+        )
 
 
 async def morsty(parameters, channel, cog=None):
