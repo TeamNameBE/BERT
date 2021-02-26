@@ -10,11 +10,9 @@ def createReminder(name, start_time, duration, cog=None):
 
 
 async def addReminder(parameters, channel, cog=None):
-    if len(parameters) < 3:
-        channel.send("La commande n'est pas correcte fdp")
-
     start_time = datetime.strptime(
-        "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M")
+        "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
+    )
     name = parameters[2]
     duration = datetime.strptime(
         parameters[3], "%H:%M")
@@ -53,25 +51,29 @@ def getFutureEvents(name, value, cog=None):
         Reminder.objects.filter(
             start_time__range=[
                 datetime.now(),
-                datetime.now() + datetime.timedelta(hour=value)]
+                datetime.now() + datetime.timedelta(hour=value),
+            ]
         )
     if name == "days":
         Reminder.objects.filter(
             start_time__range=[
                 datetime.now(),
-                datetime.now() + datetime.timedelta(day=value)]
+                datetime.now() + datetime.timedelta(day=value),
+            ]
         )
     if name == "month":
         Reminder.objects.filter(
             start_time__range=[
                 datetime.now(),
-                datetime.now() + datetime.timedelta(month=value)]
+                datetime.now() + datetime.timedelta(month=value),
+            ]
         )
     if name == "year":
         Reminder.objects.filter(
             start_time__range=[
                 datetime.now(),
-                datetime.now() + datetime.timedelta(year=value)]
+                datetime.now() + datetime.timedelta(year=value),
+            ]
         )
 
 
@@ -80,7 +82,8 @@ async def getFuture(parameters, channel, cog=None):
 
 
 async def morsty(parameters, channel, cog=None):
-    await channel.send("""```
+    await channel.send(
+        """```
                ___
             .-9 9 `\\     Is it
           =(:(::)=  ;       Binary ?
@@ -96,7 +99,8 @@ async def morsty(parameters, channel, cog=None):
        .-' \\,..._\\     \\`   .-'  .-'
       `-=``      `:    |   /-/-/`
                    `.__/
-```""")
+```"""
+    )
 
 
 async def hjelp(parameters, channel, cog=None):
@@ -111,14 +115,14 @@ async def hjelp(parameters, channel, cog=None):
 
 
 commands = {
-    'addreminder': addReminder,
-    'delreminder': delReminder,
-    'modreminder': modReminder,
-    'getfuture': getFuture,
-    'morsty': morsty,
-    'deathping': deathping,
-    'stopping': stopDeathping,
-    'help': hjelp,
+    "addreminder": addReminder,
+    "delreminder": delReminder,
+    "modreminder": modReminder,
+    "getfuture": getFuture,
+    "morsty": morsty,
+    "deathping": deathping,
+    "stopping": stopDeathping,
+    "help": hjelp,
 }
 
 
