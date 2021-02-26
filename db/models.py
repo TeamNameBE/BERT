@@ -9,7 +9,7 @@ class Reminder(models.Model):
     start_time = models.DateTimeField(null=True)
     duration = models.TimeField(null=True)
     guild = models.IntegerField(default=0)
-    role_to_remind = models.CharField(max_length=150, null=True)
+    role_to_remind = models.TextField(null=True)
 
     @property
     def isNow(self):
