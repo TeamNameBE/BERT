@@ -21,7 +21,7 @@ async def addReminder(parameters, channel, cog=None):
     )
     name = parameters[2].lower()
     duration = datetime.strptime(parameters[3], "%H:%M")
-    people_to_remind = ", ".join(parameters[4:])
+    people_to_remind = " ".join(parameters[4:])
 
     await sync_to_async(createReminder)(
         name=name,
@@ -69,7 +69,7 @@ async def deathping(parameters, channel, cog=None):
 
 
 @requires_paramaters
-async def stopDeathping(parameters, channel, cog=None):
+async def stopping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
@@ -150,7 +150,7 @@ commands = {
     "getfuture": getFuture,
     "morsty": morsty,
     "deathping": deathping,
-    "stopping": stopDeathping,
+    "stopping": stopping,
     "help": hjelp,
 }
 

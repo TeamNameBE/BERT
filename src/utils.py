@@ -66,7 +66,7 @@ def modifyReminder(name, server_id, field, value, cog):
         if value not in ["true", "false"]:
             return {"error": True, "msg": f"Toi choisir 'true' ou 'false', pas {value}"}
         old_value = "true" if reminder.dp_participants else "false"
-        reminder.dp_participants = True if value == "true" else "false"
+        reminder.dp_participants = True if value == "true" else False
 
     else:
         return {"error": True, "msg": f"Bert pas connaitre champs {field}"}
