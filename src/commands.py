@@ -92,6 +92,7 @@ async def getFuture(parameters, channel, cog=None):
         value = parameters[1]
     if not value.isdigit():
         await channel.send(f"La valeur {value} doit être chiffre")
+        return
     value = int(value)
     future_events = await sync_to_async(getFutureEvents)(
         name=field, value=value, guild=channel.guild.id
