@@ -1,6 +1,7 @@
 import json
 
 from datetime import datetime
+from django.contrib.humanize.templatetags import naturaltime
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
@@ -99,7 +100,8 @@ async def getFuture(parameters, channel, cog=None):
     )
     for event in future_events:
         await channel.send(
-            f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}```"
+            f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}\n\n \
+                {naturaltime(event['start_time'])}```"
         )
     if len(future_events) == 0:
         await channel.send("Bert a pas trouvé événements dans période donnée")
