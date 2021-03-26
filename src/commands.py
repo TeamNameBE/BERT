@@ -1,7 +1,7 @@
 import json
 
 from datetime import datetime
-from django.contrib.humanize.templatetags import naturaltime
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
