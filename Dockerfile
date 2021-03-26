@@ -19,7 +19,7 @@ RUN pip install flake8
 COPY . .
 RUN flake8 --ignore=E501,E402,F401 .
 
-RUN apk update && apk add build-base
+RUN apk update && apk add build-base postgresql-dev gcc python3-dev musl-dev
 
 # install dependencies
 COPY ./requirements.txt .
