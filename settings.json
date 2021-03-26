@@ -5,6 +5,8 @@
     "/modreminder": "name parameter(name|start_date|duration|channel|allow_dp) new_value\n    Modifies the given field of a reminder",
     "/getfuture": "[hours|days|weeks] value\n    Returns the reminders until the given date (defaults to next week)",
     "/help": "[command]\n    displays help message about the specified command, or about every command",
+    "/deathping": "[@someone]\n    Deathping someone (May be multiple people)",
+    "/stopping": "[@someone]\n    Stops a deathping on someone",
     "/morsty": "\n    ? ? ?"
   }
 }
