@@ -1,5 +1,6 @@
 ve/
 .env
+.env.prod.db
 __pycache__/
 db.sqlite3
 os
