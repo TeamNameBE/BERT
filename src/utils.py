@@ -1,3 +1,4 @@
+import pytz
 import datetime
 
 from django.utils import timezone
@@ -25,6 +26,9 @@ def modifyReminder(name, server_id, field, value, cog):
     if field == "start_date":
         try:
             value = datetime.datetime.strptime(value, "%d/%m/%Y %H:%M")
+
+            local_tz = pytz.timezone('Europe/Brussels')
+            value = datetime.strptime(value, "%d/%m/%Y %H:%M").astimezone(local_tz)
         except Exception:
             return {
                 "error": True,

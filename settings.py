@@ -17,6 +17,7 @@ DATABASES = {
 INSTALLED_APPS = ("db",)
 
 TIME_ZONE = "Europe/Brussels"
+USE_TZ = True
 
 # SECURITY WARNING: Modify this secret key if using in production!
 SECRET_KEY = "6few3nci_q_o@l1dlbk81%wcxe!*6r29yu629&d97!hiqat9fa"
