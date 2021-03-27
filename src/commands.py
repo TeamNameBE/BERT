@@ -18,10 +18,9 @@ async def displayResult(channel, result):
 
 @requires_paramaters(nb_parameters=5)
 async def addReminder(parameters, channel, cog=None):
-    local_tz = pytz.timezone('Europe/Brussels')
     start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
-    ).astimezone(local_tz)
+    ).replace(tzinfo=pytz.timezone('Europe/Brussels'))
     name = parameters[2].lower()
     duration = datetime.strptime(parameters[3], "%H:%M")
     people_to_remind = " ".join(parameters[4:])
