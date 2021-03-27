@@ -25,7 +25,7 @@ def modifyReminder(name, server_id, field, value, cog):
 
     if field == "start_date":
         try:
-            value = datetime.strptime(value, "%d/%m/%Y %H:%M").replace(tzinfo=pytz.timezone('Europe/Brussels'))
+            value = datetime.strptime(value, "%d/%m/%Y %H:%M").astimezone(pytz.timezone('Europe/Brussels'))
         except Exception:
             return {
                 "error": True,
