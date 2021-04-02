@@ -7,7 +7,8 @@
     "/help": "[command]\n    displays help message about the specified command, or about every command",
     "/deathping": "[@someone]\n    Deathping someone (May be multiple people)",
     "/stopping": "[@someone]\n    Stops a deathping on someone",
-    "/morsty": "\n    ? ? ?"
+    "/morsty": "\n    ? ? ?",
+    "/pic": "category\n   Give you a random picture of the choosen category"
   },
   "constants": {
     "deathping_gif": "https://tenor.com/bih59.gif"

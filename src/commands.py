@@ -1,6 +1,7 @@
 import json
 import pytz
 import requests
+import discord
 
 from django.utils import timezone
 from django.contrib.humanize.templatetags.humanize import naturaltime
@@ -153,13 +154,15 @@ async def hjelp(parameters, channel, cog=None):
 
 
 @requires_paramaters
-async def get_picture(parameters, channel, cog=None):
+async def pic(parameters, channel, cog=None):
     category = parameters[0]
     payload = {'client_id': UNSPLASH_API, 'query': category}
     response = requests.get('https://api.unsplash.com/photos/random', params=payload)
     response = response.json()
-    message = f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)"
-    await channel.send(f"{message}\n{response['urls']['small']}")
+    em = discord.Embed(title=response['alt_description'], description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)")
+    em.set_image(url=response['urls']['small'])
+    em.set_author(name=response['user']['name'], url=f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral")
+    await channel.send(embed=em)
 
 
 commands = {
@@ -171,7 +174,7 @@ commands = {
     "deathping": deathping,
     "stopping": stopping,
     "help": hjelp,
-    "picture": get_picture,
+    "pic": pic,
 }
 
 
