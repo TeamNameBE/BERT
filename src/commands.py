@@ -190,12 +190,12 @@ async def vote(parameters, channel, cog=None):
     )
 
     for i in range(len(parameters)):
-        em.add_field(name=parameters[i], value=f"{word_num[i]}")
+        em.add_field(name=parameters[i], value=f":{word_num[i]}:")
 
     message = await channel.send(embed=em)
 
     for i in range(len(parameters)):
-        await message.add(f"{word_num[i]}")
+        await message.add(f":{word_num[i]}:")
 
 
 commands = {
