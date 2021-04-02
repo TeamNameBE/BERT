@@ -157,7 +157,7 @@ async def get_picture(parameters, channel, cog=None):
     response = requests.get('https://api.unsplash.com/photos/random', params=payload)
     response = response.json()
     message = f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)"
-    await channel.send(message, {'files': [response['urls']['small']]})
+    await channel.send(f"{message}\n{response['urls']['small']}")
 
 
 commands = {
