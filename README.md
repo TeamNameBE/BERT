@@ -29,6 +29,9 @@ a Bot Excelling in Reminding Things
 * **/morsty**
 
   * ? ? ?
+* **/pic** [category]
+
+  * Return a random picture of the choosen category
 
 ## Installation
 
