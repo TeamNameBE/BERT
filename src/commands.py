@@ -1,6 +1,7 @@
 import json
 import pytz
 import requests
+import logger
 
 from django.utils import timezone
 from django.contrib.humanize.templatetags.humanize import naturaltime
@@ -157,6 +158,8 @@ async def get_picture(parameters, channel, cog=None):
     response = requests.get('https://api.unsplash.com/photos/random', params=payload)
     response = response.json()
     message = f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)"
+    logger.log("Message :", message)
+    logger.log("Picture URL :", response['urls']['small'])
     await channel.send(f"{message}\n{response['urls']['small']}")
 
 
