@@ -1,5 +1,5 @@
 import json
-import pytz
+from datetime import datetime
 import requests
 
 from django.utils import timezone
@@ -7,10 +7,11 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
-from src.decorators import requires_paramaters
+from src.decorators import requires_paramaters, log_this
 from settings import UNSPLASH_API
 
 
+@log_this
 async def displayResult(channel, result):
     if result["error"]:
         await channel.send(f"**{result['msg']}**")
@@ -19,12 +20,13 @@ async def displayResult(channel, result):
 
 
 @requires_paramaters(nb_parameters=5)
+@log_this
 async def addReminder(parameters, channel, cog=None):
-    start_time = timezone.strptime(
+    start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
-    ).astimezone(pytz.timezone('Europe/London'))
+    )
     name = parameters[2].lower()
-    duration = timezone.strptime(parameters[3], "%H:%M")
+    duration = datetime.strptime(parameters[3], "%H:%M")
     people_to_remind = " ".join(parameters[4:])
 
     await sync_to_async(createReminder)(
@@ -35,14 +37,14 @@ async def addReminder(parameters, channel, cog=None):
         channel_id=channel.id,
         server_id=channel.guild.id,
     )
-    await channel.send(
-        "Bert a ajouté l'évenement **{}** le **{}** (pour {})".format(
-            name, start_time.strftime("%d/%m/%y à %H:%M"), people_to_remind
-        )
+    message = "Bert a ajouté l'évenement **{}** le **{}** (pour {})".format(
+        name, start_time.strftime("%d/%m/%y à %H:%M"), people_to_remind
     )
+    await channel.send(message)
 
 
 @requires_paramaters
+@log_this
 async def delReminder(parameters, channel, cog=None):
     name = parameters[0]
 
@@ -51,6 +53,7 @@ async def delReminder(parameters, channel, cog=None):
 
 
 @requires_paramaters(nb_parameters=3)
+@log_this
 async def modReminder(parameters, channel, cog=None):
     name = parameters[0]
     guild_id = channel.guild.id
@@ -64,6 +67,7 @@ async def modReminder(parameters, channel, cog=None):
 
 
 @requires_paramaters
+@log_this
 async def deathping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
@@ -76,6 +80,7 @@ async def deathping(parameters, channel, cog=None):
 
 
 @requires_paramaters
+@log_this
 async def stopping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
@@ -89,6 +94,7 @@ async def stopping(parameters, channel, cog=None):
                 )
 
 
+@log_this
 async def getFuture(parameters, channel, cog=None):
     if len(parameters) == 0:
         field = "days"
@@ -112,6 +118,7 @@ async def getFuture(parameters, channel, cog=None):
         await channel.send("Bert a pas trouvé événements dans période donnée")
 
 
+@log_this
 async def morsty(parameters, channel, cog=None):
     await channel.send(
         """```
@@ -134,6 +141,7 @@ async def morsty(parameters, channel, cog=None):
     )
 
 
+@log_this
 async def hjelp(parameters, channel, cog=None):
     settings = json.load(open("settings.json"))
 
@@ -153,6 +161,7 @@ async def hjelp(parameters, channel, cog=None):
 
 
 @requires_paramaters
+@log_this
 async def get_picture(parameters, channel, cog=None):
     category = parameters[0]
     payload = {'client_id': UNSPLASH_API, 'query': category}
@@ -175,6 +184,7 @@ commands = {
 }
 
 
+@log_this
 async def execCommand(line, channel, cog):
     parameters = (
         line.replace("\n", " ").replace("\r", " ").replace("\t", " ").split(" ")

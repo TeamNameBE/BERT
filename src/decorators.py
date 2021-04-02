@@ -1,3 +1,6 @@
+import logging
+
+
 class requires_paramaters:
     def __init__(self, func=None, nb_parameters=1):
         self.func = func
@@ -14,5 +17,23 @@ class requires_paramaters:
                 await args[1].send(
                     f"Ta commande pas correcte, toi taper `/help {self.func.__name__.lower()}` pour plus infos"
                 )
+
+        return wrapper(*args, **kwargs)
+
+
+class log_this:
+    def __init__(self, func=None):
+        self.func = func
+
+    def __call__(self, *args, **kwargs):
+        if not self.func:
+            return self.__class__(args[0])
+
+        async def wrapper(*args, **kwargs):
+            try:
+                result = await self.func(*args, **kwargs)
+                return result
+            except Exception as e:
+                logging.error(f"Error occured in {self.func.__name__} : {e}")
 
         return wrapper(*args, **kwargs)
