@@ -8,7 +8,7 @@
     "/deathping": "[@someone]\n    Deathping someone (May be multiple people)",
     "/stopping": "[@someone]\n    Stops a deathping on someone",
     "/morsty": "\n    ? ? ?",
-    "/pic": "category    Give you a random picture of the choosen category"
+    "/pic": "category\n   Give you a random picture of the choosen category"
   },
   "constants": {
     "deathping_gif": "https://tenor.com/bih59.gif"
