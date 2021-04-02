@@ -19,5 +19,7 @@ INSTALLED_APPS = ("db",)
 TIME_ZONE = "Europe/Brussels"
 USE_TZ = True
 
+UNSPLASH_API = os.environ.get("UNSPLASH_API")
+
 # SECURITY WARNING: Modify this secret key if using in production!
 SECRET_KEY = "6few3nci_q_o@l1dlbk81%wcxe!*6r29yu629&d97!hiqat9fa"
