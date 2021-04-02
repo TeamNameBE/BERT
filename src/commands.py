@@ -68,8 +68,10 @@ async def deathping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
+            settings = json.load(open("settings.json"))
+
             await channel.send(f"Gonna ping the shit out of {uid}")
-            await channel.send("https://tenor.com/bih59.gif")
+            await channel.send(settings["constants"]["deathping_gif"])
             cog.toBePinged.append((uid, channel.id))
 
 
