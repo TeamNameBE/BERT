@@ -1,6 +1,3 @@
-import pytz
-import datetime
-
 from django.utils import timezone
 from db.models import Reminder
 
@@ -25,7 +22,7 @@ def modifyReminder(name, server_id, field, value, cog):
 
     if field == "start_date":
         try:
-            value = datetime.strptime(value, "%d/%m/%Y %H:%M").astimezone(pytz.timezone('Europe/Brussels'))
+            value = timezone.strptime(value, "%d/%m/%Y %H:%M")
         except Exception:
             return {
                 "error": True,
@@ -49,7 +46,7 @@ def modifyReminder(name, server_id, field, value, cog):
             return {"error": True, "msg": "Heures peut pas être plus que 23"}
         if int(minutes) > 59:
             return {"error": True, "msg": "Minutes peut pas être plus que 59"}
-        value = datetime.time(hour=int(hours), minute=int(minutes))
+        value = timezone.time(hour=int(hours), minute=int(minutes))
         old_value = reminder.duration
         reminder.duration = value
 
@@ -94,22 +91,22 @@ def getFutureEvents(name, value, guild):
     if name == "hours":
         reminders = Reminder.objects.filter(
             start_time__range=[
-                datetime.datetime.now(),
-                datetime.datetime.now() + datetime.timedelta(hours=value),
+                timezone.now(),
+                timezone.now() + timezone.timedelta(hours=value),
             ]
         ).order_by("start_time")
     elif name == "days":
         reminders = Reminder.objects.filter(
             start_time__range=[
-                datetime.datetime.now(),
-                datetime.datetime.now() + datetime.timedelta(days=value),
+                timezone.now(),
+                timezone.now() + timezone.timedelta(days=value),
             ]
         ).order_by("start_time")
     elif name == "week":
         reminders = Reminder.objects.filter(
             start_time__range=[
-                datetime.datetime.now(),
-                datetime.datetime.now() + datetime.timedelta(weeks=value),
+                timezone.now(),
+                timezone.now() + timezone.timedelta(weeks=value),
             ]
         ).order_by("start_time")
     else:
