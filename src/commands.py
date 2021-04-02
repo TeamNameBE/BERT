@@ -1,7 +1,7 @@
 import json
 import pytz
 
-from datetime import datetime
+from django.utils import timezone
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from asgiref.sync import sync_to_async
 
@@ -18,11 +18,11 @@ async def displayResult(channel, result):
 
 @requires_paramaters(nb_parameters=5)
 async def addReminder(parameters, channel, cog=None):
-    start_time = datetime.strptime(
+    start_time = timezone.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
     ).astimezone(pytz.timezone('Europe/London'))
     name = parameters[2].lower()
-    duration = datetime.strptime(parameters[3], "%H:%M")
+    duration = timezone.strptime(parameters[3], "%H:%M")
     people_to_remind = " ".join(parameters[4:])
 
     await sync_to_async(createReminder)(
