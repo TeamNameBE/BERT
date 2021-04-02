@@ -165,13 +165,37 @@ async def hjelp(parameters, channel, cog=None):
 @log_this
 async def pic(parameters, channel, cog=None):
     category = parameters[0]
-    payload = {'client_id': UNSPLASH_API, 'query': category}
-    response = requests.get('https://api.unsplash.com/photos/random', params=payload)
+    payload = {"client_id": UNSPLASH_API, "query": category}
+    response = requests.get("https://api.unsplash.com/photos/random", params=payload)
     response = response.json()
-    em = discord.Embed(title=response['alt_description'], description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)")
-    em.set_image(url=response['urls']['small'])
-    em.set_author(name=response['user']['name'], url=f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral")
+    em = discord.Embed(
+        title=response["alt_description"],
+        description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)",
+    )
+    em.set_image(url=response["urls"]["small"])
+    em.set_author(
+        name=response["user"]["name"],
+        url=f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral",
+    )
     await channel.send(embed=em)
+
+
+@requires_paramaters
+@log_this
+async def vote(parameters, channel, cog=None):
+    word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    em = discord.Embed(
+        title="This is a vote",
+        description="React to this message for vote",
+    )
+
+    for i in range(len(parameters)):
+        em.add_field(name=parameters[i], value=f"{word_num[i]}")
+
+    message = await channel.send(embed=em)
+
+    for i in range(len(parameters)):
+        await message.add(f"{word_num[i]}")
 
 
 commands = {
@@ -184,6 +208,7 @@ commands = {
     "stopping": stopping,
     "help": hjelp,
     "pic": pic,
+    "vote": vote
 }
 
 
