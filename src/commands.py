@@ -1,5 +1,6 @@
 import json
 import pytz
+import requests
 
 from datetime import datetime
 from django.contrib.humanize.templatetags.humanize import naturaltime
@@ -7,6 +8,7 @@ from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
 from src.decorators import requires_paramaters
+from settings import UNSPLASH_API
 
 
 async def displayResult(channel, result):
@@ -148,6 +150,16 @@ async def hjelp(parameters, channel, cog=None):
         await channel.send(help_msg)
 
 
+@requires_paramaters
+async def get_picture(parameters, channel, cog=None):
+    category = parameters[0]
+    payload = {'client_id': UNSPLASH_API, 'query': category}
+    response = requests.get('https://api.unsplash.com/photos/random', params=payload)
+    response = response.json()
+    message = f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)"
+    await channel.send(message, {'files': [response['urls']['small']]})
+
+
 commands = {
     "addreminder": addReminder,
     "delreminder": delReminder,
@@ -157,6 +169,7 @@ commands = {
     "deathping": deathping,
     "stopping": stopping,
     "help": hjelp,
+    "picture": get_picture,
 }
 
 
