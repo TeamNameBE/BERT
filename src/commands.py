@@ -2,6 +2,8 @@ import json
 from datetime import datetime
 import requests
 import discord
+import emoji
+import re
 
 from django.utils import timezone
 from django.contrib.humanize.templatetags.humanize import naturaltime
@@ -184,18 +186,19 @@ async def pic(parameters, channel, cog=None):
 @log_this
 async def vote(parameters, channel, cog=None):
     word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    word_emojis = [f":keycap_{x}:" for x in range(10)]
     em = discord.Embed(
         title="This is a vote",
         description="React to this message to vote",
     )
 
-    for i in range(len(parameters)):
+    for i in range(1, len(parameters)):
         em.add_field(name=parameters[i], value=f":{word_num[i]}:")
 
     message = await channel.send(embed=em)
 
     for i in range(len(parameters)):
-        await message.add_reaction(f":{word_num[i]}:")
+        await message.add_reaction(emoji.emojize(word_emojis[i]))
 
 
 commands = {
