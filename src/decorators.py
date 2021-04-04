@@ -37,3 +37,9 @@ class log_this:
                 logging.error(f"Error occured in {self.func.__name__} : {e}")
 
         return wrapper(*args, **kwargs)
+
+    @property
+    def __name__(self):
+        if self.func:
+            return self.func.__name__
+        return self.__class__.__name__
