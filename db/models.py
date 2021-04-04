@@ -1,3 +1,5 @@
+import pytz
+
 from django.db import models
 from django.utils import timezone
 
@@ -21,7 +23,7 @@ class Reminder(models.Model):
         return {
             "ID": self.id,
             "name": self.name,
-            "start_time": self.start_time,
+            "start_time": self.start_time.astimezone(pytz.timezone('Europe/Brussels')).strftime("%d %b %Y à %H:%M"),
             "roles": self.role_to_remind,
             "duration": self.duration,
         }
