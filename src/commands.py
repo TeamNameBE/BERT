@@ -196,6 +196,7 @@ async def vote(parameters, channel, cog=None):
             "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
                 vote_regex,
                 "/vote \"Ca va ?\" \"Oui\" \"Non\""))
+        return
 
     splitted = re.findall(r'"(.*?)"', parameters)
     question = splitted[0]
