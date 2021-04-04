@@ -1,6 +1,8 @@
 from django.utils import timezone
 from db.models import Reminder
 
+from src.decorators import log_this
+
 
 def createReminder(name, start_time, duration, people_to_remind, channel_id, server_id):
     Reminder.objects.create(
@@ -124,3 +126,13 @@ def loadNearFutureEvents():
         start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
         advertised=False,
     )
+
+
+@log_this
+async def advertise_event(event, guild):
+    channel = guild.get_channel(event.channel)
+    await channel.send(
+        f"Salut {event.role_to_remind} ! C'est le moment pour {event.name} durant {event.duration} !"
+    )
+    if event.dp_participants:
+        await channel.send(f"/deathping {event.role_to_remind}")

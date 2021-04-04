@@ -1,8 +1,7 @@
-from django.utils import timezone
 from discord.ext import tasks, commands
 from asgiref.sync import sync_to_async
 
-from src.utils import loadNearFutureEvents
+from src.utils import loadNearFutureEvents, advertise_event
 
 
 class ReminderCog(commands.Cog):
@@ -38,8 +37,9 @@ class ReminderCog(commands.Cog):
     @tasks.loop(seconds=2.0)
     async def getEvent(self):
         events = await sync_to_async(self.getLoadedEvents)()
-        for event, guild in events:
-            await event.advertise(self.bot.get_guild(int(guild)))
+        for event, guild_id in events:
+            guild = self.bot.get_guild(guild_id)
+            await advertise_event(event, guild=guild)
 
     @tasks.loop(seconds=30.0)
     async def loader(self):
