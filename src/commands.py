@@ -187,17 +187,33 @@ async def pic(parameters, channel, cog=None):
 async def vote(parameters, channel, cog=None):
     word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     word_emojis = [f":keycap_{x}:" for x in range(10)]
+
+    parameters = " ".join(parameters)
+    vote_regex = "^\"([a-zA-Z0-9?!'éèàù ])+\"( \"([a-zA-Z0-9?!'éèàù ])+\"){1,10}$"
+
+    if not re.match(vote_regex, parameters):
+        await channel.send(
+            "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
+                vote_regex,
+                "/vote \"Ca va ?\" \"Oui\" \"Non\""))
+
+    splitted = re.findall(r'"(.*?)"', parameters)
+    question = splitted[0]
+    responses = splitted[1:]
+    print(responses)
+
     em = discord.Embed(
-        title="This is a vote",
+        title=question,
         description="React to this message to vote",
     )
 
-    for i in range(1, len(parameters)):
-        em.add_field(name=parameters[i], value=f":{word_num[i]}:")
+    print(len(responses))
+    for i in range(len(responses)):
+        em.add_field(name=responses[i], value=f":{word_num[i]}:")
 
     message = await channel.send(embed=em)
 
-    for i in range(len(parameters)):
+    for i in range(len(responses)):
         await message.add_reaction(emoji.emojize(word_emojis[i]))
 
 
