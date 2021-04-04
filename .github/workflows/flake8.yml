@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: Raspi-4
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
