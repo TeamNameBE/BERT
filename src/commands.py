@@ -164,8 +164,8 @@ async def hjelp(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def pic(parameters, channel, cog=None):
-    category = parameters[0]
-    payload = {'client_id': UNSPLASH_API, 'query': category}
+    query = " ".join(parameters)
+    payload = {'client_id': UNSPLASH_API, 'query': query}
     response = requests.get('https://api.unsplash.com/photos/random', params=payload)
     response = response.json()
     em = discord.Embed(title=response['alt_description'], description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)")
