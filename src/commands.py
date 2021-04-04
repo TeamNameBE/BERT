@@ -186,7 +186,7 @@ async def vote(parameters, channel, cog=None):
     word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     em = discord.Embed(
         title="This is a vote",
-        description="React to this message for vote",
+        description="React to this message to vote",
     )
 
     for i in range(len(parameters)):
