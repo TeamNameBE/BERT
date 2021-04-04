@@ -9,7 +9,7 @@
     "/stopping": "[@someone]\n    Stops a deathping on someone",
     "/morsty": "\n    ? ? ?",
     "/pic": "category\n   Gives you a random picture of the choosen category",
-    "/vote": "\"Question\" \"proposition0\" ... \"proposition10\"\n    Creates an embed message for a quick vote"
+    "/vote": "\"Question\" \"proposition 0\" ... \"proposition 10\"\n    Creates an embed message for a quick vote"
   },
   "constants": {
     "deathping_gif": "https://tenor.com/bih59.gif"
