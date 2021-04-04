@@ -190,7 +190,7 @@ async def vote(parameters, channel, cog=None):
     word_emojis = [f":keycap_{x}:" for x in range(10)]
 
     parameters = " ".join(parameters)
-    vote_regex = "^\"([a-zA-Z0-9?!'éèàù\-_ ])+\"( \"([a-zA-Z0-9?!'éèàù\-_ ])+\"){1,10}$"
+    vote_regex = "^\"([a-zA-Z0-9?!'éèàù\\-_ ])+\"( \"([a-zA-Z0-9?!'éèàù\\-_ ])+\"){1,10}$"
 
     if not re.match(vote_regex, parameters):
         await channel.send(
