@@ -201,14 +201,12 @@ async def vote(parameters, channel, cog=None):
     splitted = re.findall(r'"(.*?)"', parameters)
     question = splitted[0]
     responses = splitted[1:]
-    print(responses)
 
     em = discord.Embed(
         title=question,
         description="React to this message to vote",
     )
 
-    print(len(responses))
     for i in range(len(responses)):
         em.add_field(name=responses[i], value=f":{word_num[i]}:")
 
