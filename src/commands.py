@@ -2,6 +2,8 @@ import json
 from datetime import datetime
 import requests
 import discord
+import emoji
+import re
 
 from django.utils import timezone
 from django.contrib.humanize.templatetags.humanize import naturaltime
@@ -167,11 +169,52 @@ async def pic(parameters, channel, cog=None):
     query = " ".join(parameters)
     payload = {'client_id': UNSPLASH_API, 'query': query}
     response = requests.get('https://api.unsplash.com/photos/random', params=payload)
+
     response = response.json()
-    em = discord.Embed(title=response['alt_description'], description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)")
-    em.set_image(url=response['urls']['small'])
-    em.set_author(name=response['user']['name'], url=f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral")
+    em = discord.Embed(
+        title=response["alt_description"],
+        description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)",
+    )
+    em.set_image(url=response["urls"]["small"])
+    em.set_author(
+        name=response["user"]["name"],
+        url=f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral",
+    )
     await channel.send(embed=em)
+
+
+@requires_paramaters
+@log_this
+async def vote(parameters, channel, cog=None):
+    word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    word_emojis = [f":keycap_{x}:" for x in range(10)]
+
+    parameters = " ".join(parameters)
+    vote_regex = "^\"([a-zA-Z0-9?!'éèàù ])+\"( \"([a-zA-Z0-9?!'éèàù ])+\"){1,10}$"
+
+    if not re.match(vote_regex, parameters):
+        await channel.send(
+            "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
+                vote_regex,
+                "/vote \"Ca va ?\" \"Oui\" \"Non\""))
+        return
+
+    splitted = re.findall(r'"(.*?)"', parameters)
+    question = splitted[0]
+    responses = splitted[1:]
+
+    em = discord.Embed(
+        title=question,
+        description="React to this message to vote",
+    )
+
+    for i in range(len(responses)):
+        em.add_field(name=responses[i], value=f":{word_num[i]}:")
+
+    message = await channel.send(embed=em)
+
+    for i in range(len(responses)):
+        await message.add_reaction(emoji.emojize(word_emojis[i]))
 
 
 commands = {
@@ -184,6 +227,7 @@ commands = {
     "stopping": stopping,
     "help": hjelp,
     "pic": pic,
+    "vote": vote
 }
 
 

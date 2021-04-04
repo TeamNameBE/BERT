@@ -8,7 +8,8 @@
     "/deathping": "[@someone]\n    Deathping someone (May be multiple people)",
     "/stopping": "[@someone]\n    Stops a deathping on someone",
     "/morsty": "\n    ? ? ?",
-    "/pic": "category\n   Give you a random picture of the choosen category"
+    "/pic": "category\n   Gives you a random picture of the choosen category",
+    "/vote": "\"Question\" \"proposition 0\" ... \"proposition 10\"\n    Creates an embed message for a quick vote"
   },
   "constants": {
     "deathping_gif": "https://tenor.com/bih59.gif"
