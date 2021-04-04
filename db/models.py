@@ -1,3 +1,5 @@
+import pytz
+
 from django.db import models
 from django.utils import timezone
 
@@ -6,8 +8,8 @@ class Reminder(models.Model):
     name = models.CharField(max_length=150, default="none", unique=True)
     start_time = models.DateTimeField(null=True)
     duration = models.TimeField(null=True)
-    guild = models.CharField(max_length=128, default=0)
-    channel = models.CharField(max_length=128, default=0)
+    guild = models.PositiveBigIntegerField(default=0)
+    channel = models.PositiveBigIntegerField(default=0)
     role_to_remind = models.TextField(null=True)
     advertised = models.BooleanField(default=False)
     dp_participants = models.BooleanField(default=False)
@@ -21,18 +23,10 @@ class Reminder(models.Model):
         return {
             "ID": self.id,
             "name": self.name,
-            "start_time": self.start_time,
+            "start_time": self.start_time.astimezone(pytz.timezone('Europe/Brussels')).strftime("%d %b %Y à %H:%M"),
             "roles": self.role_to_remind,
             "duration": self.duration,
         }
 
     def __repr__(self):
         return f"Reminder {self.name} (advertised: {self.advertised})"
-
-    async def advertise(self, guild):
-        channel = guild.get_channel(self.channel)
-        await channel.send(
-            f"Salut {self.role_to_remind} ! C'est le moment pour {self.name} durant {self.duration} !"
-        )
-        if self.dp_participants:
-            await channel.send(f"/deathping {self.role_to_remind}")

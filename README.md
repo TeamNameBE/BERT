@@ -21,7 +21,9 @@ a Bot Excelling in Reminding Things
   * Stops a deathping on someone
 * **/morsty**
   * ? ? ?
-* **/vote** "Question" "proposition0" ... "proposition10"
+* **/pic** keywords
+  * Returns a random picture corresponding to the give keywords
+* **/vote** "Question" "proposition 0" ... "proposition 10"
   * Creates an embed message for a quick vote
 
 ## Installation

@@ -17,7 +17,6 @@ class MyClient(discord.Client):
         # await channel.send('<@&{}> up'.format(389427227785428992))
 
     async def on_message(self, message):
-        # print('Message from {0.author}: {0.content}'.format(message))
         if message.content and message.content[0] == "/":
             await execCommand(message.content[1:], message.channel, cog)
 
