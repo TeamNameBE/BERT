@@ -39,7 +39,7 @@ class ReminderCog(commands.Cog):
     async def getEvent(self):
         events = await sync_to_async(self.getLoadedEvents)()
         for event, guild in events:
-            await event.advertise(self.bot.get_guild(guild))
+            await event.advertise(self.bot.get_guild(int(guild)))
 
     @tasks.loop(seconds=30.0)
     async def loader(self):
