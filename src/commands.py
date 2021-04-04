@@ -195,7 +195,7 @@ async def vote(parameters, channel, cog=None):
     message = await channel.send(embed=em)
 
     for i in range(len(parameters)):
-        await message.add(f":{word_num[i]}:")
+        await message.add_reaction(f":{word_num[i]}:")
 
 
 commands = {
