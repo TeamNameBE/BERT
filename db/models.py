@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from src.decorators import log_this
+
 
 class Reminder(models.Model):
     name = models.CharField(max_length=150, default="none", unique=True)
@@ -29,6 +31,7 @@ class Reminder(models.Model):
     def __repr__(self):
         return f"Reminder {self.name} (advertised: {self.advertised})"
 
+    @log_this
     async def advertise(self, guild):
         channel = guild.get_channel(self.channel)
         await channel.send(
