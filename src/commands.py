@@ -167,8 +167,8 @@ async def hjelp(parameters, channel, cog=None):
 @log_this
 async def pic(parameters, channel, cog=None):
     query = " ".join(parameters)
-    payload = {'client_id': UNSPLASH_API, 'query': query}
-    response = requests.get('https://api.unsplash.com/photos/random', params=payload)
+    payload = {"client_id": UNSPLASH_API, "query": query}
+    response = requests.get("https://api.unsplash.com/photos/random", params=payload)
 
     response = response.json()
     em = discord.Embed(
@@ -186,17 +186,29 @@ async def pic(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def vote(parameters, channel, cog=None):
-    word_num = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    word_num = [
+        "zero",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+    ]
     word_emojis = [f":keycap_{x}:" for x in range(10)]
 
     parameters = " ".join(parameters)
-    vote_regex = "^\"([a-zA-Z0-9?!'éèàù\\-_ ])+\"( \"([a-zA-Z0-9?!'éèàù\\-_ ])+\"){1,10}$"
+    vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
 
     if not re.match(vote_regex, parameters):
         await channel.send(
             "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
-                vote_regex,
-                "/vote \"Ca va ?\" \"Oui\" \"Non\""))
+                vote_regex, '/vote "Ca va ?" "Oui" "Non"'
+            )
+        )
         return
 
     splitted = re.findall(r'"(.*?)"', parameters)
@@ -227,7 +239,7 @@ commands = {
     "stopping": stopping,
     "help": hjelp,
     "pic": pic,
-    "vote": vote
+    "vote": vote,
 }
 
 
@@ -239,5 +251,4 @@ async def execCommand(line, channel, cog):
     if parameters[0] not in commands.keys():
         await channel.send("Bert pas connaitre `{}`".format(parameters[0]))
         return
-    else:
-        await commands[parameters[0]](parameters[1:], channel, cog)
+    await commands[parameters[0]](parameters[1:], channel, cog)

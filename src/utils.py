@@ -57,9 +57,8 @@ def modifyReminder(name, server_id, field, value, cog):
         channel = guild.get_channel(int(value[2:-1]))
         if channel is None:
             return {"error": True, "msg": f"Bert pas trouvé channel '{value}'"}
-        else:
-            old_value = f"<#{reminder.channel}>"
-            reminder.channel = value[2:-1]
+        old_value = f"<#{reminder.channel}>"
+        reminder.channel = value[2:-1]
 
     elif field == "allow_dp":
         value = value.lower()
