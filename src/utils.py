@@ -5,11 +5,13 @@ from db.models import Reminder
 from src.decorators import log_this
 
 
-def createReminder(name, start_time, duration, people_to_remind, channel_id, server_id):
+def createReminder(name: str, start_time, duration, people_to_remind, channel_id, server_id):
+
+    end_time = start_time + duration
     Reminder.objects.create(
         name=name,
         start_time=start_time,
-        duration=duration,
+        end_time=end_time,
         role_to_remind=people_to_remind,
         channel=channel_id,
         guild=server_id,
