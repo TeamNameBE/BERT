@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import datetime as dt
 import requests
 import discord
 import emoji
@@ -28,7 +29,10 @@ async def addReminder(parameters, channel, cog=None):
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
     )
     name = parameters[2].lower()
-    duration = datetime.strptime(parameters[3], "%H:%M")
+
+    hours, minutes = parameters[3].split(":")
+    duration = dt.timedelta(hours=int(hours), minutes=int(minutes))
+
     people_to_remind = " ".join(parameters[4:])
 
     start_time = timezone.make_aware(start_time)
