@@ -74,7 +74,7 @@ def modifyReminder(name, server_id, field, value, cog):
 
     return {
         "error": False,
-        "msg": f"Bert a modifié champs {field} ({old_value} => {value}) événement '{reminder.name}'",
+        "msg": f"Bert a modifié champs **{field}** ({old_value} => {value}) événement '**{reminder.name}**'",
     }
 
 

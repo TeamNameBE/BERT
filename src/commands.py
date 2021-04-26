@@ -114,8 +114,7 @@ async def getFuture(parameters, channel, cog=None):
     )
     for event in future_events:
         await channel.send(
-            f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}\n\n \
-                {naturaltime(event['start_time'])}```"
+            f"```Événement : {event['name']}\n  Début : {event['start_time']}\n  Durée : {event['duration']}\n\n```"
         )
     if len(future_events) == 0:
         await channel.send("Bert a pas trouvé événements dans période donnée")
