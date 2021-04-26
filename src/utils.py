@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.utils import timezone
 from db.models import Reminder
 
@@ -24,13 +25,16 @@ def modifyReminder(name, server_id, field, value, cog):
 
     if field == "start_date":
         try:
-            value = timezone.strptime(value, "%d/%m/%Y %H:%M")
+            value = datetime.strptime(value, "%d/%m/%Y %H:%M")
         except Exception:
             return {
                 "error": True,
                 "msg": f"Format pas correct : {value}",
             }
-        old_value = reminder.start_time
+        old_value = datetime.strftime(
+            timezone.make_naive(reminder.start_time),
+            "%d/%m/%Y %H:%M"
+        )
         reminder.start_time = value
 
     elif field == "name":

@@ -32,6 +32,8 @@ async def addReminder(parameters, channel, cog=None):
     duration = datetime.strptime(parameters[3], "%H:%M")
     people_to_remind = " ".join(parameters[4:])
 
+    start_time = timezone.make_aware(start_time)
+
     await sync_to_async(createReminder)(
         name=name,
         start_time=start_time,
@@ -41,7 +43,7 @@ async def addReminder(parameters, channel, cog=None):
         server_id=channel.guild.id,
     )
     message = "Bert a ajouté l'évenement **{}** le **{}** (pour {})".format(
-        name, start_time.strftime("%d/%m/%y à %H:%M"), people_to_remind
+        name, start_time.strftime("%d/%m/%Y à %H:%M"), people_to_remind
     )
     await channel.send(message)
 
