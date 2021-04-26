@@ -1,4 +1,5 @@
 import logging
+import traceback
 
 
 class requires_paramaters:
@@ -35,6 +36,7 @@ class log_this:
                 return result
             except Exception as e:
                 logging.error(f"Error occured in {self.func.__name__} : {e}")
+                traceback.print_exc()
 
         return wrapper(*args, **kwargs)
 
