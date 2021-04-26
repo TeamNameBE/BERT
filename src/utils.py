@@ -1,4 +1,5 @@
 from datetime import datetime
+import datetime as dt
 from django.utils import timezone
 from db.models import Reminder
 
@@ -37,7 +38,10 @@ def modifyReminder(name, server_id, field, value, cog):
             timezone.make_naive(reminder.start_time),
             "%d/%m/%Y %H:%M"
         )
+        # Keep the duration constant
+        duration = reminder.duration
         reminder.start_time = value
+        reminder.set_duration(duration)
 
     elif field == "name":
         value = value.lower()
@@ -50,13 +54,9 @@ def modifyReminder(name, server_id, field, value, cog):
             return {"error": True, "msg": "Heures doivent être chiffre"}
         if not minutes.isdigit():
             return {"error": True, "msg": "Minutes doivent être chiffre"}
-        if int(hours) > 23:
-            return {"error": True, "msg": "Heures peut pas être plus que 23"}
-        if int(minutes) > 59:
-            return {"error": True, "msg": "Minutes peut pas être plus que 59"}
-        value = timezone.time(hour=int(hours), minute=int(minutes))
+        duration = dt.timedelta(hours=int(hours), minutes=int(minutes))
         old_value = reminder.duration
-        reminder.duration = value
+        reminder.set_duration(duration)
 
     elif field == "channel":
         guild = cog.bot.get_guild(server_id)
