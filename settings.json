@@ -1,6 +1,6 @@
 {
   "help": {
-    "/addreminder": "date(jj/mm/yyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)\n    creates a reminder at the given date that concerns the mentionned role/user",
+    "/addreminder": "date(jj/mm/yyyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)\n    creates a reminder at the given date that concerns the mentionned role/user",
     "/delreminder": "name\n    deletes a reminder",
     "/modreminder": "name parameter(name|start_date|duration|channel|allow_dp) new_value\n    Modifies the given field of a reminder",
     "/getfuture": "[hours|days|weeks] value\n    Returns the reminders until the given date (defaults to next week)",
