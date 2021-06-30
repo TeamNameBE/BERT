@@ -7,7 +7,16 @@ from src.decorators import log_this
 
 
 def createReminder(name: str, start_time, duration, people_to_remind, channel_id, server_id):
+    """Creates a reminder object and stores it in the database
 
+    Args:
+        name (str): The name of the reminder
+        start_time (str): The hour of the start
+        duration (str): The duration of the event
+        people_to_remind (str): The role/people to remind (@someone)
+        channel_id (str): The id of the channel to advertise the reminder in
+        server_id (str): The id of the server to advertise the event in
+    """
     end_time = start_time + duration
     Reminder.objects.create(
         name=name,
@@ -20,6 +29,18 @@ def createReminder(name: str, start_time, duration, people_to_remind, channel_id
 
 
 def modifyReminder(name, server_id, field, value, cog):
+    """Modifies the selected field of the selected reminer
+
+    Args:
+        name (str): The name of the reminder
+        server_id (str): The id of the server inn which to modify the reminder
+        field (str): The name of the field to modify
+        value (str): The new value for the field
+        cog (Cog): The cog that handles periodic events
+
+    Returns:
+        dict: A dictionnary containing the information of wether the modification went well or not
+    """
     reminder = Reminder.objects.filter(name=name, guild=server_id)
     if reminder.count() == 0:
         return {"error": True, "msg": f"Bert a pas trouvé événement '{name}'"}
@@ -84,7 +105,16 @@ def modifyReminder(name, server_id, field, value, cog):
     }
 
 
-def deleteReminder(name, server_id):
+def deleteReminder(name: str, server_id: str):
+    """Delets a reminder in the database
+
+    Args:
+        name (str): The name of the reminder to delete
+        server_id (str): The id of the server in which to delete the reminder
+
+    Returns:
+        dict: A dictionnary containing the information of wether the modification went well or not
+    """
     reminder = Reminder.objects.filter(name=name, guild=server_id)
     if reminder.count() == 0:
         return {"error": True, "msg": f"Bert a pas trouvé événement '{name}'"}
@@ -94,7 +124,17 @@ def deleteReminder(name, server_id):
     return {"error": False, "msg": f"Bert a supprimé événement '{name}'"}
 
 
-def getFutureEvents(name, value, guild):
+def getFutureEvents(name: str, value: str, guild: str):
+    """Returns the events in the given period of time from the given server
+
+    Args:
+        name (str): the type of timing of the next value (hours, minutes,...)
+        value (str): the value of time to get the events in
+        guild (str): The id of the guild to get the event in
+
+    Returns:
+        list: A list of reminders
+    """
     if name == "hours":
         reminders = Reminder.objects.filter(
             start_time__range=[
@@ -135,6 +175,12 @@ def loadNearFutureEvents():
 
 @log_this
 async def advertise_event(event, guild):
+    """Displays the event, pinging the people, ...
+
+    Args:
+        event (Reminder): The event to advertise
+        guild (Discord.Guild): The server on which the event should be advertised
+    """
     channel = guild.get_channel(event.channel)
     await channel.send(
         f"Salut {event.role_to_remind} ! C'est le moment pour {event.name} durant {event.duration} !"

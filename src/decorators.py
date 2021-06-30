@@ -5,6 +5,8 @@ from datetime import datetime
 
 
 class requires_paramaters:
+    """Indicates that a function requires user arguments"""
+
     def __init__(self, func=None, nb_parameters=1):
         self.func = func
         self.nb_parameters = nb_parameters
@@ -25,6 +27,8 @@ class requires_paramaters:
 
 
 class log_this:
+    """Handles the logging of eventual exceptions"""
+
     def __init__(self, func=None):
         self.func = func
 

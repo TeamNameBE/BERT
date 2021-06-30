@@ -15,9 +15,15 @@ class ReminderCog(commands.Cog):
         self.near_events = loadNearFutureEvents()
 
     def cog_unload(self):
+        """Deletes the cog"""
         self.loader.cancel()
 
     def getLoadedEvents(self):
+        """Returns the loaded events
+
+        Returns:
+            list: The list of events
+        """
         events_to_return = []
         for event in self.near_events:
             if event.isNow:
@@ -28,6 +34,7 @@ class ReminderCog(commands.Cog):
 
     @tasks.loop(seconds=2.0)
     async def pinger(self):
+        """Pings the people targeted by a deathping command"""
         if len(self.toBePinged) != 0:
             await self.bot.wait_until_ready()
             for pinged, channel in self.toBePinged:
@@ -36,6 +43,7 @@ class ReminderCog(commands.Cog):
 
     @tasks.loop(seconds=2.0)
     async def getEvent(self):
+        """Loads the next events"""
         events = await sync_to_async(self.getLoadedEvents)()
         for event, guild_id in events:
             guild = self.bot.get_guild(guild_id)
@@ -43,4 +51,5 @@ class ReminderCog(commands.Cog):
 
     @tasks.loop(seconds=30.0)
     async def loader(self):
+        """Loads the near events every 30 seconds"""
         self.near_events = await sync_to_async(loadNearFutureEvents)()

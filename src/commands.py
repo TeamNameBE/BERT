@@ -25,6 +25,13 @@ async def displayResult(channel, result):
 @requires_paramaters(nb_parameters=5)
 @log_this
 async def addReminder(parameters, channel, cog=None):
+    """Adds a reminder in the database
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
     )
@@ -54,6 +61,13 @@ async def addReminder(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def delReminder(parameters, channel, cog=None):
+    """Deletes a reminder
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     name = parameters[0]
 
     result = await sync_to_async(deleteReminder)(name, channel.guild.id)
@@ -63,6 +77,13 @@ async def delReminder(parameters, channel, cog=None):
 @requires_paramaters(nb_parameters=3)
 @log_this
 async def modReminder(parameters, channel, cog=None):
+    """Modifies the selected field from a reminder
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     name = parameters[0]
     guild_id = channel.guild.id
     field = parameters[1]
@@ -77,6 +98,13 @@ async def modReminder(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def deathping(parameters, channel, cog=None):
+    """Launches a deathping on the given user (The bot will ping the user every two seconds)
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
@@ -90,6 +118,13 @@ async def deathping(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def stopping(parameters, channel, cog=None):
+    """Stops the deathping on the selected user
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
@@ -104,6 +139,13 @@ async def stopping(parameters, channel, cog=None):
 
 @log_this
 async def getFuture(parameters, channel, cog=None):
+    """Returns the future events occuring in the given period of time
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     if len(parameters) == 0:
         field = "days"
         value = "7"
@@ -127,6 +169,7 @@ async def getFuture(parameters, channel, cog=None):
 
 @log_this
 async def morsty(parameters, channel, cog=None):
+    """Morsty's a mystery"""
     await channel.send(
         """```
                ___
@@ -150,6 +193,13 @@ async def morsty(parameters, channel, cog=None):
 
 @log_this
 async def hjelp(parameters, channel, cog=None):
+    """Displays help messages on the commands
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     settings = json.load(open("settings.json"))
 
     if len(parameters) >= 1:
@@ -170,6 +220,13 @@ async def hjelp(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def pic(parameters, channel, cog=None):
+    """Shows a random pic using the given tag
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     query = " ".join(parameters)
     payload = {"client_id": UNSPLASH_API, "query": query}
     response = requests.get("https://api.unsplash.com/photos/random", params=payload)
@@ -190,17 +247,16 @@ async def pic(parameters, channel, cog=None):
 @requires_paramaters
 @log_this
 async def vote(parameters, channel, cog=None):
+    """Creates a vote embed
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
     word_num = [
-        "zero",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine",
+        "zero", "one", "two", "three", "four",
+        "five", "six", "seven", "eight", "nine",
     ]
     word_emojis = [f":keycap_{x}:" for x in range(10)]
 
@@ -249,6 +305,13 @@ commands = {
 
 @log_this
 async def execCommand(line, channel, cog):
+    """Executes the given command if it exists
+
+    Args:
+        line (str): The original message content
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog): The cog which handles the periodic events.
+    """
     parameters = (
         line.replace("\n", " ").replace("\r", " ").replace("\t", " ").split(" ")
     )

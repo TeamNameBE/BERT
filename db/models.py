@@ -16,14 +16,29 @@ class Reminder(models.Model):
 
     @property
     def isNow(self):
+        """Whether the event should be advertised now or not
+
+        Returns:
+            bool: Whether the event should be advertised
+        """
         return (timezone.now() >= self.start_time) and not self.advertised
 
     @property
     def duration(self):
+        """Returns the duration of the event
+
+        Returns:
+            int: The duration of the event
+        """
         return self.end_time - self.start_time
 
     @property
     def serialized(self):
+        """Returns a serialized version of the event
+
+        Returns:
+            dict: The event serialized
+        """
         return {
             "ID": self.id,
             "name": self.name,
@@ -33,6 +48,11 @@ class Reminder(models.Model):
         }
 
     def set_duration(self, duration):
+        """Sets the duration of a reminder by moving the end_time
+
+        Args:
+            duration (int): The duration of the event
+        """
         self.end_time = self.start_time + duration
 
     def __repr__(self):
