@@ -8,6 +8,7 @@ import re
 
 from django.utils import timezone
 from asgiref.sync import sync_to_async
+from discord_slash import SlashContext
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
 from decorators.log_this import log_this
@@ -29,6 +30,10 @@ async def displayResult(channel, result):
 
 @requires_parameters
 @log_this
+@registry.register(
+    command="delreminder",
+    description="Deletes a reminder"
+)
 async def delReminder(parameters, channel, cog=None):
     """Deletes a reminder
 
@@ -39,7 +44,11 @@ async def delReminder(parameters, channel, cog=None):
     """
     name = parameters[0]
 
-    result = await sync_to_async(deleteReminder)(name, channel.guild.id)
+    if type(channel) is SlashContext:
+        guild_id = channel.channel.guild.id
+    else:
+        guild_id = channel.guild.id
+    result = await sync_to_async(deleteReminder)(name, guild_id)
     await displayResult(channel, result)
 
 
