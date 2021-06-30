@@ -3,8 +3,10 @@ from discord_slash.utils.manage_commands import create_option
 
 from singleton.client import Bert
 from singleton.command_manager import CommandManager
+from singleton.command_registry import CommandRegistry
 
 slash = Bert.getInstance().slash
+registry = CommandRegistry.getInstance()
 
 
 @slash.slash(
@@ -46,4 +48,5 @@ slash = Bert.getInstance().slash
 )
 async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, duration: str, peopleToRemind: str):
     params = [date, hour, name, duration, peopleToRemind]
-    CommandManager.getInstance().addReminder(params, ctx)
+    command = registry.get("addreminder")
+    command(params, ctx)
