@@ -12,7 +12,7 @@ from django.utils import timezone
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
-from src.decorators import requires_paramaters, log_this
+from decorators.requires_parameters import requires_parameters
 from settings import UNSPLASH_API
 
 
@@ -24,7 +24,7 @@ async def displayResult(channel, result):
         await channel.send(result["msg"])
 
 
-@requires_paramaters
+@requires_parameters
 @log_this
 async def delReminder(parameters, channel, cog=None):
     """Deletes a reminder
@@ -40,7 +40,7 @@ async def delReminder(parameters, channel, cog=None):
     await displayResult(channel, result)
 
 
-@requires_paramaters(nb_parameters=3)
+@requires_parameters(nb_parameters=3)
 @log_this
 async def modReminder(parameters, channel, cog=None):
     """Modifies the selected field from a reminder
@@ -61,7 +61,7 @@ async def modReminder(parameters, channel, cog=None):
     await displayResult(channel, result)
 
 
-@requires_paramaters
+@requires_parameters
 @log_this
 async def deathping(parameters, channel, cog=None):
     """Launches a deathping on the given user (The bot will ping the user every two seconds)
@@ -81,7 +81,7 @@ async def deathping(parameters, channel, cog=None):
             cog.toBePinged.append((uid, channel.id))
 
 
-@requires_paramaters
+@requires_parameters
 @log_this
 async def stopping(parameters, channel, cog=None):
     """Stops the deathping on the selected user
@@ -157,6 +157,7 @@ async def morsty(parameters, channel, cog=None):
     )
 
 
+@requires_parameters(nb_parameters=5)
 @log_this
 async def hjelp(parameters, channel, cog=None):
     """Displays help messages on the commands
@@ -183,7 +184,7 @@ async def hjelp(parameters, channel, cog=None):
         await channel.send(help_msg)
 
 
-@requires_paramaters
+@requires_parameters
 @log_this
 async def pic(parameters, channel, cog=None):
     """Shows a random pic using the given tag
@@ -210,7 +211,7 @@ async def pic(parameters, channel, cog=None):
     await channel.send(embed=em)
 
 
-@requires_paramaters
+@requires_parameters
 @log_this
 async def vote(parameters, channel, cog=None):
     """Creates a vote embed

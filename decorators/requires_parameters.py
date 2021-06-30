@@ -1,4 +1,4 @@
-class requires_paramaters:
+class requires_parameters:
     """Indicates that a function requires user arguments"""
 
     def __init__(self, func=None, nb_parameters=1):
