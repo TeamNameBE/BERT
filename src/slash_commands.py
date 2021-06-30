@@ -2,7 +2,6 @@ from discord_slash import SlashContext
 from discord_slash.utils.manage_commands import create_option
 
 from singleton.client import Bert
-from singleton.command_manager import CommandManager
 from singleton.command_registry import CommandRegistry
 
 slash = Bert.getInstance().slash
@@ -39,14 +38,43 @@ registry = CommandRegistry.getInstance()
             option_type=3
         ),
         create_option(
-            name="peopleToRemind",
+            name="people_to_remind",
             description="The people concerned by this reminder",
             required=True,
-            option_type=6
+            option_type=3
         )
     ]
 )
-async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, duration: str, peopleToRemind: str):
-    params = [date, hour, name, duration, peopleToRemind]
+async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, duration: str, people_to_remind: str):
+    params = [date, hour, name, duration, people_to_remind]
     command = registry.get("addreminder")
-    command(params, ctx)
+    await command(params, ctx)
+
+
+@slash.slash(
+    name="help",
+    description="Displays help messages",
+    guild_ids=[789136699477065748],
+)
+async def _help(ctx: SlashContext):
+    command = registry.get("help")
+    await command([], ctx.channel)
+
+
+@slash.slash(
+    name="delreminder",
+    description="Deletes a reminder",
+    guild_ids=[789136699477065748],
+    options=[
+        create_option(
+            name="name",
+            description="The name of the reminder",
+            required=True,
+            option_type=3
+        )
+    ]
+)
+async def _delreminder(ctx: SlashContext, name: str):
+    params = [name]
+    command = registry.get("delreminder")
+    await command(params, ctx.channel)
