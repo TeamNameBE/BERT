@@ -3,8 +3,6 @@ from datetime import datetime
 import datetime as dt
 import requests
 import discord
-from discord_slash import SlashCommand, SlashContext
-from discord_slash.utils.manage_commands import create_choice, create_option
 import emoji
 import re
 
@@ -12,8 +10,13 @@ from django.utils import timezone
 from asgiref.sync import sync_to_async
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
+from decorators.log_this import log_this
 from decorators.requires_parameters import requires_parameters
 from settings import UNSPLASH_API
+
+from singleton.command_registry import CommandRegistry
+
+registry = CommandRegistry.getInstance()
 
 
 @log_this
@@ -159,6 +162,49 @@ async def morsty(parameters, channel, cog=None):
 
 @requires_parameters(nb_parameters=5)
 @log_this
+@registry.register(
+    command="addreminder",
+    description="Adds a reminder"
+)
+async def addReminder(parameters, channel, cog=None):
+    """Adds a reminder in the database
+
+    Args:
+        parameters (list): The list of parameters required for the command to work
+        channel (discord.channel): The channel in which the command has been done
+        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
+    """
+    start_time = datetime.strptime(
+        "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
+    )
+    name = parameters[2].lower()
+
+    hours, minutes = parameters[3].split(":")
+    duration = dt.timedelta(hours=int(hours), minutes=int(minutes))
+
+    people_to_remind = " ".join(parameters[4:])
+
+    start_time = timezone.make_aware(start_time)
+
+    await sync_to_async(createReminder)(
+        name=name,
+        start_time=start_time,
+        duration=duration,
+        people_to_remind=people_to_remind,
+        channel_id=channel.id,
+        server_id=channel.guild.id,
+    )
+    message = "Bert a ajouté l'évenement **{}** le **{}** (pour {})".format(
+        name, start_time.strftime("%d/%m/%Y à %H:%M"), people_to_remind
+    )
+    await channel.send(message)
+
+
+@log_this
+@registry.register(
+    command="help",
+    description="Prints help messages"
+)
 async def hjelp(parameters, channel, cog=None):
     """Displays help messages on the commands
 
