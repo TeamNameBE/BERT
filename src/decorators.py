@@ -1,6 +1,8 @@
 import logging
 import traceback
 
+from datetime import datetime
+
 
 class requires_paramaters:
     def __init__(self, func=None, nb_parameters=1):
@@ -35,7 +37,7 @@ class log_this:
                 result = await self.func(*args, **kwargs)
                 return result
             except Exception as e:
-                logging.error(f"Error occured in {self.func.__name__} : {e}")
+                logging.error(f"\n\n*** {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ***\nError occured in {self.func.__name__} : {e}")
                 traceback.print_exc()
 
         return wrapper(*args, **kwargs)
