@@ -17,6 +17,9 @@ class CommandManager:
             raise Exception("The class is a singleton")
         CommandManager.instance = self
 
+        import src.commands
+        import src.slash_commands
+
         self.client = client
 
     async def execCommand(self, line, channel, cog):
