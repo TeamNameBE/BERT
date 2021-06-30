@@ -1,6 +1,7 @@
 import discord
 import os
 import django
+from web.app import app
 
 # Django specific settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
@@ -28,4 +29,5 @@ if API_KEY == "":
 client = MyClient()
 cog = ReminderCog(client)
 
+client.loop.create_task(app.run_task('0.0.0.0'))
 client.run(API_KEY)
