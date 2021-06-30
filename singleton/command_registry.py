@@ -1,4 +1,4 @@
-from src.command import Command
+from models.command import Command
 
 
 class CommandRegistry:
