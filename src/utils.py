@@ -3,7 +3,7 @@ import datetime as dt
 from django.utils import timezone
 from db.models import Reminder
 
-from src.decorators import log_this
+from decorators.log_this import log_this
 
 
 def createReminder(name: str, start_time, duration, people_to_remind, channel_id, server_id):
