@@ -1,3 +1,6 @@
+from src.command import Command
+
+
 class CommandRegistry:
     """Registers bot's available commands"""
 
@@ -16,14 +19,19 @@ class CommandRegistry:
 
         self.commands = []
 
-    def register(self, function):
-        self.commands.append(function)
+    def register(self, *args, **kwargs):
+        def decorator(fun):
+            command = Command(fun)
+            for keyword, value in kwargs.items():
+                setattr(command, keyword, value)
 
-        async def wrapper(*args, **kwargs):
-            print("In register")
-            print("*args =", args)
-            print("**kwargs =", kwargs)
+            self.commands.append(command)
 
-            await self.func(*args, **kwargs)
+            async def wrapper(*args, **kwargs):
+                await self.func(*args, **kwargs)
 
-        return wrapper()
+            return wrapper
+        return decorator
+
+    def get(self, command):
+        return self.commands[self.commands.index(command)]
