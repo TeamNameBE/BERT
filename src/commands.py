@@ -54,6 +54,10 @@ async def delReminder(parameters, channel, cog=None):
 
 @requires_parameters(nb_parameters=3)
 @log_this
+@registry.register(
+    command="modreminder",
+    description="Modifies a field of a reminder"
+)
 async def modReminder(parameters, channel, cog=None):
     """Modifies the selected field from a reminder
 
@@ -75,6 +79,10 @@ async def modReminder(parameters, channel, cog=None):
 
 @requires_parameters
 @log_this
+@registry.register(
+    command="deathping",
+    description="Pings a person every two seconds until stopped"
+)
 async def deathping(parameters, channel, cog=None):
     """Launches a deathping on the given user (The bot will ping the user every two seconds)
 
@@ -95,6 +103,10 @@ async def deathping(parameters, channel, cog=None):
 
 @requires_parameters
 @log_this
+@registry.register(
+    command="stopping",
+    description="Stops pinging a person"
+)
 async def stopping(parameters, channel, cog=None):
     """Stops the deathping on the selected user
 
@@ -116,6 +128,10 @@ async def stopping(parameters, channel, cog=None):
 
 
 @log_this
+@registry.register(
+    command="getfuture",
+    description="Returns a list of future reminders"
+)
 async def getFuture(parameters, channel, cog=None):
     """Returns the future events occuring in the given period of time
 
@@ -146,6 +162,10 @@ async def getFuture(parameters, channel, cog=None):
 
 
 @log_this
+@registry.register(
+    command="mortsy",
+    description="? ? ?"
+)
 async def morsty(parameters, channel, cog=None):
     """Morsty's a mystery"""
     await channel.send(
@@ -241,6 +261,10 @@ async def hjelp(parameters, channel, cog=None):
 
 @requires_parameters
 @log_this
+@registry.register(
+    command="pic",
+    decription="Shows a random image with the given tags"
+)
 async def pic(parameters, channel, cog=None):
     """Shows a random pic using the given tag
 
@@ -268,6 +292,10 @@ async def pic(parameters, channel, cog=None):
 
 @requires_parameters
 @log_this
+@registry.register(
+    command="vote",
+    description="Proposes a vote with the given options"
+)
 async def vote(parameters, channel, cog=None):
     """Creates a vote embed
 
