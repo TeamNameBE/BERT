@@ -1,17 +1,20 @@
 from discord_slash import SlashContext
-from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_commands import create_option, create_choice
 
 from singleton.client import Bert
 from singleton.command_registry import CommandRegistry
+from singleton.constants import Constants
 
 slash = Bert.getInstance().slash
 registry = CommandRegistry.getInstance()
+constants = Constants.getInstance()
+
 
 
 @slash.slash(
     name="addreminder",
     description="creates a reminder at the given date that concerns the mentionned role/user",
-    guild_ids=[789136699477065748],
+    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="date",
@@ -64,7 +67,7 @@ async def _help(ctx: SlashContext):
 @slash.slash(
     name="delreminder",
     description="Deletes a reminder",
-    guild_ids=[789136699477065748],
+    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="name",
