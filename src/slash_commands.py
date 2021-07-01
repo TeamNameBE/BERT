@@ -10,6 +10,27 @@ registry = CommandRegistry.getInstance()
 constants = Constants.getInstance()
 
 
+@slash.slash(
+    name="help",
+    description="Displays help messages",
+    guild_ids=constants.guild_ids,
+    options=[
+        create_option(
+            name="command",
+            description="The command to get help from",
+            option_type=3,
+            required=False,
+            choices=[command.command for command in registry.commands]
+        )
+    ]
+)
+async def _help(ctx: SlashContext, command: str = None):
+    help_command = registry.get("help")
+    if command is not None:
+        await help_command([command], ctx)
+    else:
+        await help_command([], ctx)
+
 
 @slash.slash(
     name="addreminder",
@@ -52,16 +73,6 @@ async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, durat
     params = [date, hour, name, duration, people_to_remind]
     command = registry.get("addreminder")
     await command(params, ctx)
-
-
-@slash.slash(
-    name="help",
-    description="Displays help messages",
-    guild_ids=[789136699477065748],
-)
-async def _help(ctx: SlashContext):
-    command = registry.get("help")
-    await command([], ctx.channel)
 
 
 @slash.slash(
