@@ -1,5 +1,6 @@
 from datetime import datetime
 import datetime as dt
+from discord_slash import SlashContext
 from django.utils import timezone
 from db.models import Reminder
 
@@ -187,3 +188,17 @@ async def advertise_event(event, guild):
     )
     if event.dp_participants:
         await channel.send(f"/deathping {event.role_to_remind}")
+
+
+@log_this
+async def displayResult(channel, result):
+    if result["error"]:
+        await channel.send(f"**{result['msg']}**")
+    else:
+        await channel.send(result["msg"])
+
+
+def _asChannel(channel):
+    if type(channel) is SlashContext:
+        return channel.channel
+    return channel
