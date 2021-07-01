@@ -10,7 +10,7 @@ from django.utils import timezone
 from asgiref.sync import sync_to_async
 from discord_slash import SlashContext
 
-from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder
+from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder, displayResult, _asChannel as _
 from decorators.log_this import log_this
 from decorators.requires_parameters import requires_parameters
 from settings import UNSPLASH_API
@@ -44,10 +44,7 @@ async def delReminder(parameters, channel, cog=None):
     """
     name = parameters[0]
 
-    if type(channel) is SlashContext:
-        guild_id = channel.channel.guild.id
-    else:
-        guild_id = channel.guild.id
+    guild_id = _(channel).guild.id
     result = await sync_to_async(deleteReminder)(name, guild_id)
     await displayResult(channel, result)
 
@@ -67,7 +64,7 @@ async def modReminder(parameters, channel, cog=None):
         cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     name = parameters[0]
-    guild_id = channel.guild.id
+    guild_id = _(channel).guild.id
     field = parameters[1]
     value = " ".join(parameters[2:])
 
@@ -96,9 +93,8 @@ async def deathping(parameters, channel, cog=None):
         if uid.startswith("<") and uid.endswith(">"):
             settings = json.load(open("settings.json"))
 
-            await channel.send(f"Gonna ping the shit out of {uid}")
-            await channel.send(settings["constants"]["deathping_gif"])
-            cog.toBePinged.append((uid, channel.id))
+            await channel.send(f"Gonna ping the shit out of {uid}\n{settings['constants']['deathping_gif']}")
+            cog.toBePinged.append((uid, _(channel).id))
 
 
 @requires_parameters
@@ -118,8 +114,8 @@ async def stopping(parameters, channel, cog=None):
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
-            if (uid, channel.id) in cog.toBePinged:
-                del cog.toBePinged[cog.toBePinged.index((uid, channel.id))]
+            if (uid, _(channel).id) in cog.toBePinged:
+                del cog.toBePinged[cog.toBePinged.index((uid, _(channel).id))]
                 await channel.send(f"Stopping to ping the shit out of {uid}")
             else:
                 await channel.send(
@@ -151,7 +147,7 @@ async def getFuture(parameters, channel, cog=None):
         return
     value = int(value)
     future_events = await sync_to_async(getFutureEvents)(
-        name=field, value=value, guild=channel.guild.id
+        name=field, value=value, guild=_(channel).guild.id
     )
     for event in future_events:
         await channel.send(
