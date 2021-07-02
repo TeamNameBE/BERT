@@ -190,7 +190,7 @@ async def getFuture(parameters, channel):
     command="mortsy",
     description="? ? ?"
 )
-async def morsty(parameters, channel):
+async def morsty(_parameters, channel):
     """Morsty's a mystery"""
     await channel.send(
         """```
