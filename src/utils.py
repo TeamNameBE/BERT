@@ -5,6 +5,7 @@ from django.utils import timezone
 from db.models import Reminder
 
 from decorators.log_this import log_this
+from singleton.cog import ReminderCog
 
 
 def createReminder(name: str, start_time, duration, people_to_remind, channel_id, server_id):
@@ -29,7 +30,7 @@ def createReminder(name: str, start_time, duration, people_to_remind, channel_id
     )
 
 
-def modifyReminder(name, server_id, field, value, cog):
+def modifyReminder(name, server_id, field, value):
     """Modifies the selected field of the selected reminer
 
     Args:
@@ -37,7 +38,6 @@ def modifyReminder(name, server_id, field, value, cog):
         server_id (str): The id of the server inn which to modify the reminder
         field (str): The name of the field to modify
         value (str): The new value for the field
-        cog (Cog): The cog that handles periodic events
 
     Returns:
         dict: A dictionnary containing the information of wether the modification went well or not
@@ -81,7 +81,7 @@ def modifyReminder(name, server_id, field, value, cog):
         reminder.set_duration(duration)
 
     elif field == "channel":
-        guild = cog.bot.get_guild(server_id)
+        guild = ReminderCog.getInstance().bot.get_guild(server_id)
         channel = guild.get_channel(int(value[2:-1]))
         if channel is None:
             return {"error": True, "msg": f"Bert pas trouvé channel '{value}'"}
