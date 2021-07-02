@@ -1,5 +1,4 @@
 import discord
-
 from discord_slash import SlashContext
 from discord_slash.utils.manage_commands import create_option, create_choice
 
