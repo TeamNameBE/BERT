@@ -141,6 +141,7 @@ async def stopping(parameters, channel):
     uids = parameters
     cog = ReminderCog.getInstance()
     for uid in uids:
+        uid = uid.replace("!", "")
         if uid.startswith("<") and uid.endswith(">"):
             if (uid, _(channel).id) in cog.toBePinged:
                 del cog.toBePinged[cog.toBePinged.index((uid, _(channel).id))]
