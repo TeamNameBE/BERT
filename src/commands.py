@@ -316,8 +316,8 @@ async def vote(parameters, channel):
         description="React to this message to vote",
     )
 
-    for i in range(len(responses)):
-        em.add_field(name=responses[i], value=f":{word_num[i]}:")
+    for i, response in enumerate(responses):
+        em.add_field(name=response, value=f":{word_num[i]}:")
 
     message = await channel.send(embed=em)
 
