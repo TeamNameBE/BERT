@@ -150,6 +150,10 @@ async def _delreminder(ctx: SlashContext, name: str):
                 create_choice(
                     name="allow_dp",
                     value="allow_dp"
+                ),
+                create_choice(
+                    name="channel",
+                    value="channel"
                 )
             ]
         ),
