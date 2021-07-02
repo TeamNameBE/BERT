@@ -19,15 +19,13 @@ class CommandManager:
             CommandManager()
         return CommandManager.instance
 
-    def __init__(self, client):
+    def __init__(self):
         if CommandManager.instance is not None:
             raise Exception("The class is a singleton")
         CommandManager.instance = self
 
         import src.commands
         import src.slash_commands
-
-        self.client = client
 
     async def execCommand(self, line, channel):
         """Executes the given command if it exists
