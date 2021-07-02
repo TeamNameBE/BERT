@@ -298,9 +298,9 @@ async def vote(parameters, channel):
     word_emojis = [f":keycap_{x}:" for x in range(10)]
 
     try:
-        parsed = parseVote(parameters)
+        parsed = parseVote(parameters, not type(channel) is discord.channel)
     except BadFormatException as e:
-        await channel.send(e)
+        await channel.send(str(e))
         return
 
     question = parsed[0]
