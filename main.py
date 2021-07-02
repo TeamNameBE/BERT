@@ -2,7 +2,7 @@ import os
 import django
 
 # Django specific settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings")
 django.setup()
 
 

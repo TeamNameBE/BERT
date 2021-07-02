@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 import datetime as dt
 import requests
@@ -14,7 +13,7 @@ from src.utils import (
     createReminder, deleteReminder, getFutureEvents, modifyReminder, displayResult, _asChannel as _, parseVote)
 from decorators.log_this import log_this
 from decorators.requires_parameters import requires_parameters
-from settings import UNSPLASH_API
+from src.settings import UNSPLASH_API
 
 from singleton.command_registry import CommandRegistry
 from singleton.cog import ReminderCog
