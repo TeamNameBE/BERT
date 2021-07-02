@@ -20,3 +20,4 @@ class Constants:
         Constants.instance = self
 
         self.guild_ids = [789136699477065748]
+        self.deathping_gif = "https://tenor.com/bih59.gif"

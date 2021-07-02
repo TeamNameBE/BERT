@@ -18,8 +18,10 @@ from settings import UNSPLASH_API
 
 from singleton.command_registry import CommandRegistry
 from singleton.cog import ReminderCog
+from singleton.constants import Constants
 
 registry = CommandRegistry.getInstance()
+constants = Constants.getInstance()
 
 
 @requires_parameters(nb_parameters=5)
@@ -125,10 +127,8 @@ async def deathping(parameters, channel):
     uids = parameters
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
-            settings = json.load(open("settings.json"))
-
-            await channel.send(f"Gonna ping the shit out of {uid}\n{settings['constants']['deathping_gif']}")
             ReminderCog.getInstance().toBePinged.append((uid, _(channel).id))
+            await channel.send(f"Gonna ping the shit out of {uid}\n{constants.deathping_gif}")
 
 
 @requires_parameters
