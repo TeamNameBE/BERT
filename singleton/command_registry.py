@@ -8,6 +8,11 @@ class CommandRegistry:
 
     @staticmethod
     def getInstance():
+        """Returns the instance of the singleton
+
+        Returns:
+            CommandRegistry: The instance
+        """
         if CommandRegistry.instance is None:
             CommandRegistry()
         return CommandRegistry.instance
@@ -19,8 +24,13 @@ class CommandRegistry:
 
         self.commands = []
 
-    def register(self, *args, **kwargs):
-        def decorator(fun):
+    def register(self, *args, **kwargs) -> callable:
+        """Decorator used to register a command in the registry, used to list all available commands
+
+        Returns:
+            callable: The decorator in itself
+        """
+        def decorator(fun: callable):
             command = Command(fun)
             for keyword, value in kwargs.items():
                 setattr(command, keyword, value)
@@ -33,5 +43,13 @@ class CommandRegistry:
             return wrapper
         return decorator
 
-    def get(self, command):
+    def get(self, command: str) -> callable:
+        """Returns the callable corresponding to the given command
+
+        Args:
+            command (str): the command
+
+        Returns:
+            callable: The function corresponding to the command
+        """
         return self.commands[self.commands.index(command)]

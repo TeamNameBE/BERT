@@ -1,5 +1,6 @@
 class Command:
-    def __init__(self, fun):
+    """Represents a command, with its help text, its description and the command in itself"""
+    def __init__(self, fun: callable):
         self.description = None
         self.command = None
         self.fun = fun

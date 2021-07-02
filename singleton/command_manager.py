@@ -8,6 +8,11 @@ class CommandManager:
 
     @staticmethod
     def getInstance():
+        """Returns the instance of the singleton
+
+        Returns:
+            CommandManager: The instance
+        """
         if CommandManager.instance is None:
             CommandManager()
         return CommandManager.instance
@@ -22,13 +27,12 @@ class CommandManager:
 
         self.client = client
 
-    async def execCommand(self, line, channel):
+    async def execCommand(self, line, channel) -> None:
         """Executes the given command if it exists
 
         Args:
             line (str): The original message content
             channel (discord.channel): The channel in which the command has been done
-            cog (Cog): The cog which handles the periodic events.
         """
         parameters = (
             line.replace("\n", " ").replace("\r", " ").replace("\t", " ").split(" ")

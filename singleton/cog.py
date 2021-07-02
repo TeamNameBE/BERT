@@ -10,6 +10,11 @@ class ReminderCog(commands.Cog):
 
     @staticmethod
     def getInstance():
+        """Returns the instance of the singleton
+
+        Returns:
+            ReminderCog: The instance
+        """
         if ReminderCog.instance is None:
             ReminderCog()
         return ReminderCog.instance
@@ -26,12 +31,12 @@ class ReminderCog(commands.Cog):
         self.toBePinged = []
         self.near_events = loadNearFutureEvents()
 
-    def cog_unload(self):
+    def cog_unload(self) -> None:
         """Deletes the cog"""
         self.loader.cancel()
 
-    def getLoadedEvents(self):
-        """Returns the loaded events
+    def getLoadedEvents(self) -> list:
+        """Returns the loaded events that need to be advertised now
 
         Returns:
             list: The list of events
@@ -45,7 +50,7 @@ class ReminderCog(commands.Cog):
         return events_to_return
 
     @tasks.loop(seconds=2.0)
-    async def pinger(self):
+    async def pinger(self) -> None:
         """Pings the people targeted by a deathping command"""
         if len(self.toBePinged) != 0:
             await Bert.getInstance().wait_until_ready()
@@ -54,14 +59,14 @@ class ReminderCog(commands.Cog):
                 await channel.send("{} up".format(pinged))
 
     @tasks.loop(seconds=2.0)
-    async def getEvent(self):
-        """Loads the next events"""
+    async def getEvent(self) -> None:
+        """Advertise the current events"""
         events = await sync_to_async(self.getLoadedEvents)()
         for event, guild_id in events:
             guild = Bert.getInstance().get_guild(guild_id)
             await advertise_event(event, guild=guild)
 
     @tasks.loop(seconds=30.0)
-    async def loader(self):
+    async def loader(self) -> None:
         """Loads the near events every 30 seconds"""
         self.near_events = await sync_to_async(loadNearFutureEvents)()

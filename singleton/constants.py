@@ -3,6 +3,11 @@ class Constants:
 
     @staticmethod
     def getInstance():
+        """Returns the instance of the singleton
+
+        Returns:
+            Constants: The instance
+        """
         if Constants.instance is None:
             Constants()
         return Constants.instance

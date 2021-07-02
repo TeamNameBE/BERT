@@ -166,7 +166,7 @@ def getFutureEvents(name: str, value: str, guild: str):
 
 
 def loadNearFutureEvents():
-    """ Loads every event that starts in less than 5 minutes """
+    """Loads every event that starts in less than 5 minutes"""
     return Reminder.objects.filter(
         start_time__gte=timezone.now() - timezone.timedelta(minutes=5),
         start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
