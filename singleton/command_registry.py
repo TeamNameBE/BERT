@@ -2,7 +2,7 @@ from models.command import Command
 
 
 class CommandRegistry:
-    """Registers bot's available commands"""
+    """The singleton responsible of holding command informations and callables"""
 
     instance = None
 

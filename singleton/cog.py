@@ -5,6 +5,8 @@ from singleton.client import Bert
 
 
 class ReminderCog(commands.Cog):
+    """The cog used to handle periodic method calls, such as event loading and advertising"""
+
     instance = None
 
     @staticmethod

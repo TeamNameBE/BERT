@@ -1,4 +1,6 @@
 class Constants:
+    """The singleton registering the constant"""
+
     instance = None
 
     @staticmethod

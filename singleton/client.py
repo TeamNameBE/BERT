@@ -5,6 +5,8 @@ from singleton.command_manager import CommandManager
 
 
 class Bert(discord.Client):
+    """The bot singleton, used to interact with the discord API"""
+
     instance = None
 
     @staticmethod

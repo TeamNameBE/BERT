@@ -4,6 +4,8 @@ registry = CommandRegistry.getInstance()
 
 
 class CommandManager:
+    """The singleton responsible of the parsing, loading and execution of commands"""
+
     instance = None
 
     @staticmethod
