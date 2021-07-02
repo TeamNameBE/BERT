@@ -1,4 +1,5 @@
 import discord
+import re
 
 from datetime import datetime
 import datetime as dt
@@ -6,6 +7,7 @@ from discord_slash import SlashContext
 from django.utils import timezone
 from db.models import Reminder
 
+from exceptions.bad_format_exception import BadFormatException
 from decorators.log_this import log_this
 from singleton.cog import ReminderCog
 
@@ -222,3 +224,20 @@ def _asChannel(channel) -> discord.channel:
     if type(channel) is SlashContext:
         return channel.channel
     return channel
+
+
+def parseVote(params, slash_command: bool = False) -> list:
+    if slash_command:
+        return params
+    else:
+        parameters = " ".join(params)
+        vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
+
+        if not re.match(vote_regex, parameters):
+            raise BadFormatException(
+                "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
+                    vote_regex, '/vote "Ca va ?" "Oui" "Non"'
+                )
+            )
+
+        return re.findall(r'"(.*?)"', parameters)

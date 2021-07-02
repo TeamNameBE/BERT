@@ -4,12 +4,13 @@ import datetime as dt
 import requests
 import discord
 import emoji
-import re
 
 from django.utils import timezone
 from asgiref.sync import sync_to_async
 
-from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder, displayResult, _asChannel as _
+from exceptions.bad_format_exception import BadFormatException
+from src.utils import (
+    createReminder, deleteReminder, getFutureEvents, modifyReminder, displayResult, _asChannel as _, parseVote)
 from decorators.log_this import log_this
 from decorators.requires_parameters import requires_parameters
 from settings import UNSPLASH_API
@@ -296,20 +297,14 @@ async def vote(parameters, channel):
     ]
     word_emojis = [f":keycap_{x}:" for x in range(10)]
 
-    parameters = " ".join(parameters)
-    vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
-
-    if not re.match(vote_regex, parameters):
-        await channel.send(
-            "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
-                vote_regex, '/vote "Ca va ?" "Oui" "Non"'
-            )
-        )
+    try:
+        parsed = parseVote(parameters)
+    except BadFormatException as e:
+        await channel.send(e)
         return
 
-    splitted = re.findall(r'"(.*?)"', parameters)
-    question = splitted[0]
-    responses = splitted[1:]
+    question = parsed[0]
+    responses = parsed[1:]
 
     em = discord.Embed(
         title=question,
