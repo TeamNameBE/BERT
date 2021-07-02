@@ -162,3 +162,22 @@ async def _deathping(ctx: SlashContext, user: discord.Member):
     params = [user.mention]
     command = registry.get("deathping")
     await command(params, ctx)
+
+
+@slash.slash(
+    name="stopping",
+    description=registry.get("stopping").description,
+    guild_ids=constants.guild_ids,
+    options=[
+        create_option(
+            name="user",
+            description="The user to stop pinging",
+            option_type=6,
+            required=True
+        )
+    ]
+)
+async def _stopping(ctx: SlashContext, user: discord.Member):
+    params = [user.mention]
+    command = registry.get("stopping")
+    await command(params, ctx)
