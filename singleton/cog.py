@@ -1,7 +1,6 @@
 from discord.ext import tasks, commands
 from asgiref.sync import sync_to_async
 
-from src.utils import loadNearFutureEvents, advertise_event
 from singleton.client import Bert
 
 
@@ -23,6 +22,8 @@ class ReminderCog(commands.Cog):
         if ReminderCog.instance is not None:
             raise Exception("This class is a singleton")
         ReminderCog.instance = self
+
+        from src.utils import loadNearFutureEvents
 
         self.reminders = []
         self.loader.start()
@@ -53,6 +54,7 @@ class ReminderCog(commands.Cog):
     async def pinger(self) -> None:
         """Pings the people targeted by a deathping command"""
         if len(self.toBePinged) != 0:
+            print(self.toBePinged)
             await Bert.getInstance().wait_until_ready()
             for pinged, channel in self.toBePinged:
                 channel = Bert.getInstance().get_channel(channel)
@@ -61,6 +63,8 @@ class ReminderCog(commands.Cog):
     @tasks.loop(seconds=2.0)
     async def getEvent(self) -> None:
         """Advertise the current events"""
+        from src.utils import advertise_event
+
         events = await sync_to_async(self.getLoadedEvents)()
         for event, guild_id in events:
             guild = Bert.getInstance().get_guild(guild_id)
@@ -69,4 +73,5 @@ class ReminderCog(commands.Cog):
     @tasks.loop(seconds=30.0)
     async def loader(self) -> None:
         """Loads the near events every 30 seconds"""
+        from src.utils import loadNearFutureEvents
         self.near_events = await sync_to_async(loadNearFutureEvents)()
