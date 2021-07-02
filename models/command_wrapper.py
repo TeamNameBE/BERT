@@ -5,6 +5,7 @@ class CommandWrapper:
         self.description = None
         self.command = None
         self.fun = fun
+        self.help = ""
 
     async def __call__(self, *args, **kwargs):
         await self.fun(*args, **kwargs)

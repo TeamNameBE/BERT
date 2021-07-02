@@ -25,7 +25,8 @@ registry = CommandRegistry.getInstance()
 @log_this
 @registry.register(
     command="addreminder",
-    description="Adds a reminder"
+    description="Adds a reminder",
+    help="date(jj/mm/yyyy) hour(HH:MM) name(no space) duration(HH:MM) peopletoremind(@role)"
 )
 async def addReminder(parameters, channel):
     """Adds a reminder in the database
@@ -64,7 +65,8 @@ async def addReminder(parameters, channel):
 @log_this
 @registry.register(
     command="delreminder",
-    description="Deletes a reminder"
+    description="Deletes a reminder",
+    help="name"
 )
 async def delReminder(parameters, channel):
     """Deletes a reminder
@@ -84,7 +86,8 @@ async def delReminder(parameters, channel):
 @log_this
 @registry.register(
     command="modreminder",
-    description="Modifies a field of a reminder"
+    description="Modifies a field of a reminder",
+    help="name parameter(name|start_date|duration|channel|allow_dp) new_value"
 )
 async def modReminder(parameters, channel):
     """Modifies the selected field from a reminder
@@ -108,7 +111,8 @@ async def modReminder(parameters, channel):
 @log_this
 @registry.register(
     command="deathping",
-    description="Pings a person every two seconds until stopped"
+    description="Pings a person every two seconds until stopped",
+    help="[@someone]"
 )
 async def deathping(parameters, channel):
     """Launches a deathping on the given user (The bot will ping the user every two seconds)
@@ -130,7 +134,8 @@ async def deathping(parameters, channel):
 @log_this
 @registry.register(
     command="stopping",
-    description="Stops pinging a person"
+    description="Stops pinging a person",
+    help="[@someone]"
 )
 async def stopping(parameters, channel):
     """Stops the deathping on the selected user
@@ -156,7 +161,8 @@ async def stopping(parameters, channel):
 @log_this
 @registry.register(
     command="getfuture",
-    description="Shows a list of future reminders"
+    description="Shows a list of future reminders",
+    help="[hours|days|weeks] value"
 )
 async def getFuture(parameters, channel):
     """Returns the future events occuring in the given period of time
@@ -189,7 +195,8 @@ async def getFuture(parameters, channel):
 @log_this
 @registry.register(
     command="morsty",
-    description="? ? ?"
+    description="? ? ?",
+    help="? ? ?"
 )
 async def morsty(_parameters, channel):
     """Morsty's a mystery"""
@@ -217,7 +224,8 @@ async def morsty(_parameters, channel):
 @log_this
 @registry.register(
     command="help",
-    description="Prints help messages"
+    description="Prints help messages",
+    help="[command]"
 )
 async def hjelp(parameters, channel):
     """Displays help messages on the commands
@@ -247,7 +255,8 @@ async def hjelp(parameters, channel):
 @log_this
 @registry.register(
     command="pic",
-    decription="Shows a random image with the given tags"
+    decription="Shows a random image with the given tags",
+    help="[tag]"
 )
 async def pic(parameters, channel):
     """Shows a random pic using the given tag
@@ -282,7 +291,8 @@ async def pic(parameters, channel):
 @log_this
 @registry.register(
     command="vote",
-    description="Proposes a vote with the given options"
+    description="Proposes a vote with the given options",
+    help="\"Question\" \"proposition 0\" ... \"proposition 10\""
 )
 async def vote(parameters, channel):
     """Creates a vote embed
