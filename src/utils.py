@@ -241,15 +241,15 @@ def parseVote(params, slash_command: bool = False) -> list:
     """
     if slash_command:
         return params
-    else:
-        parameters = " ".join(params)
-        vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
 
-        if not re.match(vote_regex, parameters):
-            raise BadFormatException(
-                "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
-                    vote_regex, '/vote "Ca va ?" "Oui" "Non"'
-                )
+    parameters = " ".join(params)
+    vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
+
+    if not re.match(vote_regex, parameters):
+        raise BadFormatException(
+            "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
+                vote_regex, '/vote "Ca va ?" "Oui" "Non"'
             )
+        )
 
-        return re.findall(r'"(.*?)"', parameters)
+    return re.findall(r'"(.*?)"', parameters)
