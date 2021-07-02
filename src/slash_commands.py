@@ -262,6 +262,13 @@ async def _stopping(ctx: SlashContext, user: discord.Member):
     ]
 )
 async def _getFuture(ctx: SlashContext, time: str = "weeks", amount: int = 1):
+    """The slash command to get the future events
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        time (str, optional): The type of time parameter. Defaults to "weeks".
+        amount (int, optional): the amount of time type. Defaults to 1.
+    """
     params = [time, str(amount)]
     command = registry.get("getfuture")
     await command(params, ctx)
@@ -273,6 +280,11 @@ async def _getFuture(ctx: SlashContext, time: str = "weeks", amount: int = 1):
     guild_ids=constants.guild_ids
 )
 async def _morsty(ctx: SlashContext):
+    """The slash command for the morsty
+
+    Args:
+        ctx (SlashContext): The context of the Slash Command
+    """
     command = registry.get("morsty")
     await command([], ctx)
 
@@ -291,6 +303,12 @@ async def _morsty(ctx: SlashContext):
     ]
 )
 async def _pic(ctx: SlashContext, tag: str = None):
+    """The slash command to get a picture
+
+    Args:
+        ctx (SlashContext): the context of the Slash Command
+        tag (str, optional): The eventua tag for the image. Defaults to None.
+    """
     params = [] if tag is None else [tag]
 
     command = registry.get("pic")
@@ -371,8 +389,12 @@ async def _pic(ctx: SlashContext, tag: str = None):
     ]
 )
 async def _vote(ctx: SlashContext, **kwargs):
+    """The slash command to make a vote
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+    """
     params = [value for key, value in kwargs.items()]
-    print(params)
 
     command = registry.get("vote")
     await command(params, ctx)

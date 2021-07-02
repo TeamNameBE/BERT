@@ -227,6 +227,18 @@ def _asChannel(channel) -> discord.channel:
 
 
 def parseVote(params, slash_command: bool = False) -> list:
+    """Parses the arguments for the vote function
+
+    Args:
+        params (list): The list of arguments
+        slash_command (bool, optional): Whether the command used is a slash command or not. Defaults to False.
+
+    Raises:
+        BadFormatException: In case the arguments do not follow the regex
+
+    Returns:
+        list: a list of parsed parameters
+    """
     if slash_command:
         return params
     else:
