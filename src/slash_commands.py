@@ -27,6 +27,12 @@ constants = Constants.getInstance()
     ]
 )
 async def _help(ctx: SlashContext, command: str = None):
+    """Slash command to display help
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        command (str, optional): The eventual command to get help on
+    """
     help_command = registry.get("help")
     if command is not None:
         await help_command([command], ctx)
@@ -72,6 +78,16 @@ async def _help(ctx: SlashContext, command: str = None):
     ]
 )
 async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, duration: str, people_to_remind: str):
+    """Slash command to add a reminder
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        date (str): The date of the reminder
+        hour (str): The hour of the reminder
+        name (str): The name of the reminder
+        duration (str): theduration of the reminder
+        people_to_remind (str): the people to remind
+    """
     params = [date, hour, name, duration, people_to_remind]
     command = registry.get("addreminder")
     await command(params, ctx)
@@ -91,6 +107,12 @@ async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, durat
     ]
 )
 async def _delreminder(ctx: SlashContext, name: str):
+    """The slash command to delete a reminder
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        name (str): the name of the reminder to delete
+    """
     params = [name]
     command = registry.get("delreminder")
     await command(params, ctx.channel)
@@ -140,6 +162,14 @@ async def _delreminder(ctx: SlashContext, name: str):
     ]
 )
 async def _modReminder(ctx: SlashContext, name: str, field: str, value: str):
+    """The slash command to modify a reminder
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        name (str): The name of the reminder to modify
+        field (str): The field to modify in the reminder
+        value (str): The new value for the field
+    """
     params = [name, field, value]
     command = registry.get("modreminder")
     await command(params, ctx)
@@ -159,6 +189,12 @@ async def _modReminder(ctx: SlashContext, name: str, field: str, value: str):
     ]
 )
 async def _deathping(ctx: SlashContext, user: discord.Member):
+    """The slash command to deathping someone
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        user (discord.Member): The user to deathping
+    """
     params = [user.mention]
     command = registry.get("deathping")
     await command(params, ctx)
@@ -178,6 +214,12 @@ async def _deathping(ctx: SlashContext, user: discord.Member):
     ]
 )
 async def _stopping(ctx: SlashContext, user: discord.Member):
+    """The slsh command to stop pinging someone
+
+    Args:
+        ctx (SlashContext): The context of the slash command
+        user (discord.Member): The user to stop pinging
+    """
     params = [user.mention]
     command = registry.get("stopping")
     await command(params, ctx)

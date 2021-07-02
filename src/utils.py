@@ -168,7 +168,11 @@ def getFutureEvents(name: str, value: str, guild: str) -> list:
 
 
 def loadNearFutureEvents() -> list:
-    """Loads every event that starts in less than 5 minutes"""
+    """Loads every event that starts in less than 5 minutes
+
+    Returns:
+        list: the list of reminders that will happen in less than five minutes
+    """
     return Reminder.objects.filter(
         start_time__gte=timezone.now() - timezone.timedelta(minutes=5),
         start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
@@ -193,7 +197,13 @@ async def advertise_event(event, guild):
 
 
 @log_this
-async def displayResult(channel, result):
+async def displayResult(channel: discord.channel, result: dict):
+    """Sends the result of a command in the channel
+
+    Args:
+        channel (discord.channel): The channel in which to send the message
+        result (dict): The result in which to take the message
+    """
     if result["error"]:
         await channel.send(f"**{result['msg']}**")
     else:
@@ -201,6 +211,14 @@ async def displayResult(channel, result):
 
 
 def _asChannel(channel) -> discord.channel:
+    """Ensure the use of discord.channel type variable
+
+    Args:
+        channel (discord.channel|SlashContext): Either a channel or a SlashContext
+
+    Returns:
+        discord.channel: The channel corresponding
+    """
     if type(channel) is SlashContext:
         return channel.channel
     return channel
