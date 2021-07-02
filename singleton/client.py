@@ -28,7 +28,7 @@ class Bert(discord.Client):
         super().__init__()
 
         self.slash = SlashCommand(self, sync_commands=True)
-        self.commandManager = CommandManager(self)
+        self.commandManager = CommandManager.getInstance()
 
     async def on_ready(self):
         """Function called when the bot is connected to the API"""
