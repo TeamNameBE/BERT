@@ -14,9 +14,6 @@ class log_this:
             return self.__class__(args[0])
 
         async def wrapper(*args, **kwargs):
-            print("In log this")
-            print("*args =", args)
-            print("**kwargs =", kwargs)
             try:
                 result = await self.func(*args, **kwargs)
                 return result

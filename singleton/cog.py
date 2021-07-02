@@ -54,7 +54,6 @@ class ReminderCog(commands.Cog):
     async def pinger(self) -> None:
         """Pings the people targeted by a deathping command"""
         if len(self.toBePinged) != 0:
-            print(self.toBePinged)
             await Bert.getInstance().wait_until_ready()
             for pinged, channel in self.toBePinged:
                 channel = Bert.getInstance().get_channel(channel)
