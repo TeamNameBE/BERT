@@ -1,4 +1,4 @@
-class Command:
+class CommandWrapper:
     """Represents a command, with its help text, its description and the command in itself"""
 
     def __init__(self, fun: callable):

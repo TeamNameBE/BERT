@@ -1,4 +1,4 @@
-from models.command import Command
+from models.command_wrapper import CommandWrapper as Command
 
 
 class CommandRegistry:
