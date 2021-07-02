@@ -260,9 +260,14 @@ async def pic(parameters, channel):
     response = requests.get("https://api.unsplash.com/photos/random", params=payload)
 
     response = response.json()
+
+    author = response['user']['name']
+    author_url = f"https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral"
+    unsplash_url = "https://unsplash.com/?utm_source=Bert&utm_medium=referral"
+
     em = discord.Embed(
         title=response["alt_description"],
-        description=f"Picture by [{response['user']['name']}](https://unsplash.com/@{response['user']['username']}?utm_source=Bert&utm_medium=referral) on [Unsplash](https://unsplash.com/?utm_source=Bert&utm_medium=referral)",
+        description=f"Picture by [{author}]({author_url}) on [Unsplash]({unsplash_url})",
     )
     em.set_image(url=response["urls"]["small"])
     em.set_author(
