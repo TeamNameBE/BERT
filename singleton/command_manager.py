@@ -22,7 +22,7 @@ class CommandManager:
 
         self.client = client
 
-    async def execCommand(self, line, channel, cog):
+    async def execCommand(self, line, channel):
         """Executes the given command if it exists
 
         Args:
@@ -37,6 +37,4 @@ class CommandManager:
             await channel.send("Bert pas connaitre `{}`".format(parameters[0]))
             return
 
-        print("Searching for", parameters[0])
-        print(registry.get(parameters[0]))
-        await registry.get(parameters[0])(parameters[1:], channel, cog)
+        await registry.get(parameters[0])(parameters[1:], channel)

@@ -22,7 +22,6 @@ class Bert(discord.Client):
         super().__init__()
 
         self.slash = SlashCommand(self, sync_commands=True)
-        self.cog = ReminderCog(self)
         self.commandManager = CommandManager(self)
 
     async def on_ready(self):
@@ -30,7 +29,7 @@ class Bert(discord.Client):
 
     async def on_message(self, message):
         if message.content and message.content[0] == "/":
-            await self.commandManager.execCommand(message.content[1:], message.channel, self.cog)
+            await self.commandManager.execCommand(message.content[1:], message.channel)
 
     def run(self, token):
         super().run(token)
