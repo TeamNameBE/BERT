@@ -3,6 +3,7 @@ from datetime import datetime
 import datetime as dt
 import requests
 import discord
+from discord import Embed
 import emoji
 
 from django.utils import timezone
@@ -234,21 +235,18 @@ async def hjelp(parameters, channel):
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
     """
-    settings = json.load(open("settings.json"))
 
     if len(parameters) >= 1:
         for command in parameters:
-            command = f"/{command}"
-            if command in settings["help"].keys():
-                await channel.send(f"```{command}: {settings['help'][command]}```")
+            if (commandWrapper := registry.get(command)) is not None:
+                await channel.send(embed=commandWrapper.asEmbed())
             else:
                 await channel.send(f"Commande '{command}' pas dans aide de bert")
     else:
-        help_msg = "```"
-        for command, help_text in settings["help"].items():
-            help_msg += f"{command}: {help_text}\n\n"
-        help_msg += "```"
-        await channel.send(help_msg)
+        help_msg = Embed(title="Help", description="Help for the functions")
+        for command in registry.commands:
+            help_msg.add_field(**command.asEmbedPart)
+        await channel.send(embed=help_msg)
 
 
 @requires_parameters

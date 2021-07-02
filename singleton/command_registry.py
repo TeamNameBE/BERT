@@ -58,4 +58,6 @@ class CommandRegistry:
         Returns:
             callable: The function corresponding to the command
         """
-        return self.commands[self.commands.index(command)]
+        if command in self.commands:
+            return self.commands[self.commands.index(command)]
+        return None
