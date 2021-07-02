@@ -42,11 +42,3 @@ class Bert(discord.Client):
         """
         if message.content and message.content[0] == "/":
             await self.commandManager.execCommand(message.content[1:], message.channel)
-
-    def run(self, token: str):
-        """Sets the bot as only and ready to receive messages
-
-        Args:
-            token (str): The secret token used to interact with discord API
-        """
-        super().run(token)
