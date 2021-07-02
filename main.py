@@ -7,6 +7,11 @@ django.setup()
 
 
 def main():
+    """The main function of the program, loads needed libs and runs the bot
+
+    Raises:
+        Exception: In case the API KEY is missing
+    """
     from singleton.client import Bert
 
     API_KEY = os.environ.get("API_KEY", "")
