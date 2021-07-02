@@ -14,9 +14,9 @@ class log_this:
             return self.__class__(args[0])
 
         async def wrapper(*args, **kwargs):
+            """The wrapper to be runned before the decorated method"""
             try:
-                result = await self.func(*args, **kwargs)
-                return result
+                return await self.func(*args, **kwargs)
             except Exception as e:
                 timestamp = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                 logging.error(

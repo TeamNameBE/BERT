@@ -31,6 +31,11 @@ class CommandRegistry:
             callable: The decorator in itself
         """
         def decorator(fun: callable):
+            """The decorator in  itself
+
+            Args:
+                fun (callable): The method to register
+            """
             command = Command(fun)
             for keyword, value in kwargs.items():
                 setattr(command, keyword, value)
@@ -38,6 +43,7 @@ class CommandRegistry:
             self.commands.append(command)
 
             async def wrapper(*args, **kwargs):
+                """The wrapper to be runned before the decorated method"""
                 await self.func(*args, **kwargs)
 
             return wrapper

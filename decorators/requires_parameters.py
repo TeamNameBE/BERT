@@ -10,6 +10,7 @@ class requires_parameters:
             return self.__class__(args[0], nb_parameters=self.nb_parameters)
 
         async def wrapper(*args, **kwargs):
+            """The wrapper to be runned before the decorated method"""
             if len(args[0]) >= self.nb_parameters:
                 await self.func(*args, **kwargs)
             else:
