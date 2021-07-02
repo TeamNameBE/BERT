@@ -13,7 +13,7 @@ def main():
     if API_KEY == "":
         raise Exception("You must specify an API key")
 
-    client = Bert()
+    client = Bert.getInstance()
 
     client.run(API_KEY)
 
