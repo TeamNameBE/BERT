@@ -8,7 +8,6 @@ import re
 
 from django.utils import timezone
 from asgiref.sync import sync_to_async
-from discord_slash import SlashContext
 
 from src.utils import createReminder, deleteReminder, getFutureEvents, modifyReminder, displayResult, _asChannel as _
 from decorators.log_this import log_this
@@ -16,6 +15,7 @@ from decorators.requires_parameters import requires_parameters
 from settings import UNSPLASH_API
 
 from singleton.command_registry import CommandRegistry
+from singleton.cog import ReminderCog
 
 registry = CommandRegistry.getInstance()
 
@@ -26,13 +26,12 @@ registry = CommandRegistry.getInstance()
     command="addreminder",
     description="Adds a reminder"
 )
-async def addReminder(parameters, channel, cog=None):
+async def addReminder(parameters, channel):
     """Adds a reminder in the database
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     start_time = datetime.strptime(
         "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
@@ -66,13 +65,12 @@ async def addReminder(parameters, channel, cog=None):
     command="delreminder",
     description="Deletes a reminder"
 )
-async def delReminder(parameters, channel, cog=None):
+async def delReminder(parameters, channel):
     """Deletes a reminder
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     name = parameters[0]
 
@@ -87,13 +85,12 @@ async def delReminder(parameters, channel, cog=None):
     command="modreminder",
     description="Modifies a field of a reminder"
 )
-async def modReminder(parameters, channel, cog=None):
+async def modReminder(parameters, channel):
     """Modifies the selected field from a reminder
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     name = parameters[0]
     guild_id = _(channel).guild.id
@@ -101,7 +98,7 @@ async def modReminder(parameters, channel, cog=None):
     value = " ".join(parameters[2:])
 
     result = await sync_to_async(modifyReminder)(
-        name=name, server_id=guild_id, field=field, value=value, cog=cog
+        name=name, server_id=guild_id, field=field, value=value
     )
     await displayResult(channel, result)
 
@@ -112,13 +109,12 @@ async def modReminder(parameters, channel, cog=None):
     command="deathping",
     description="Pings a person every two seconds until stopped"
 )
-async def deathping(parameters, channel, cog=None):
+async def deathping(parameters, channel):
     """Launches a deathping on the given user (The bot will ping the user every two seconds)
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     uids = parameters
     for uid in uids:
@@ -126,7 +122,7 @@ async def deathping(parameters, channel, cog=None):
             settings = json.load(open("settings.json"))
 
             await channel.send(f"Gonna ping the shit out of {uid}\n{settings['constants']['deathping_gif']}")
-            cog.toBePinged.append((uid, _(channel).id))
+            ReminderCog.getInstance().toBePinged.append((uid, _(channel).id))
 
 
 @requires_parameters
@@ -135,15 +131,15 @@ async def deathping(parameters, channel, cog=None):
     command="stopping",
     description="Stops pinging a person"
 )
-async def stopping(parameters, channel, cog=None):
+async def stopping(parameters, channel):
     """Stops the deathping on the selected user
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     uids = parameters
+    cog = ReminderCog.getInstance()
     for uid in uids:
         if uid.startswith("<") and uid.endswith(">"):
             if (uid, _(channel).id) in cog.toBePinged:
@@ -160,13 +156,12 @@ async def stopping(parameters, channel, cog=None):
     command="getfuture",
     description="Returns a list of future reminders"
 )
-async def getFuture(parameters, channel, cog=None):
+async def getFuture(parameters, channel):
     """Returns the future events occuring in the given period of time
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     if len(parameters) == 0:
         field = "days"
@@ -194,7 +189,7 @@ async def getFuture(parameters, channel, cog=None):
     command="mortsy",
     description="? ? ?"
 )
-async def morsty(parameters, channel, cog=None):
+async def morsty(parameters, channel):
     """Morsty's a mystery"""
     await channel.send(
         """```
@@ -222,13 +217,12 @@ async def morsty(parameters, channel, cog=None):
     command="help",
     description="Prints help messages"
 )
-async def hjelp(parameters, channel, cog=None):
+async def hjelp(parameters, channel):
     """Displays help messages on the commands
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     settings = json.load(open("settings.json"))
 
@@ -253,13 +247,12 @@ async def hjelp(parameters, channel, cog=None):
     command="pic",
     decription="Shows a random image with the given tags"
 )
-async def pic(parameters, channel, cog=None):
+async def pic(parameters, channel):
     """Shows a random pic using the given tag
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     query = " ".join(parameters)
     payload = {"client_id": UNSPLASH_API, "query": query}
@@ -284,13 +277,12 @@ async def pic(parameters, channel, cog=None):
     command="vote",
     description="Proposes a vote with the given options"
 )
-async def vote(parameters, channel, cog=None):
+async def vote(parameters, channel):
     """Creates a vote embed
 
     Args:
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
-        cog (Cog, optional): The cog which handles the periodic events. Defaults to None.
     """
     word_num = [
         "zero", "one", "two", "three", "four",
