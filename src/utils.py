@@ -55,7 +55,7 @@ def modifyReminder(name, server_id, field, value) -> dict:
     if field == "start_date":
         try:
             value = datetime.strptime(value, "%d/%m/%Y %H:%M")
-        except Exception:
+        except ValueError:
             return {
                 "error": True,
                 "msg": f"Format pas correct : {value}",
