@@ -223,3 +223,153 @@ async def _stopping(ctx: SlashContext, user: discord.Member):
     params = [user.mention]
     command = registry.get("stopping")
     await command(params, ctx)
+
+
+@slash.slash(
+    name="getfuture",
+    description="Shows the event occuring on the given amout of time",
+    guild_ids=constants.guild_ids,
+    options=[
+        create_option(
+            name="time",
+            description="the type of time",
+            required=False,
+            option_type=3,
+            choices=[
+                create_choice(
+                    name="hours",
+                    value="hours"
+                ),
+                create_choice(
+                    name="days",
+                    value="days"
+                ),
+                create_choice(
+                    name="weeks",
+                    value="weeks"
+                ),
+            ]
+        ),
+        create_option(
+            name="amount",
+            description="The quantity of the previously chosen type of time",
+            required=False,
+            option_type=4
+        )
+    ]
+)
+async def _getFuture(ctx: SlashContext, time: str = "weeks", amount: int = 1):
+    params = [time, str(amount)]
+    command = registry.get("getfuture")
+    await command(params, ctx)
+
+
+@slash.slash(
+    name="morsty",
+    description="? ? ?",
+    guild_ids=constants.guild_ids
+)
+async def _morsty(ctx: SlashContext):
+    command = registry.get("morsty")
+    await command([], ctx)
+
+
+@slash.slash(
+    name="pic",
+    description=registry.get("pic").description,
+    guild_ids=constants.guild_ids,
+    options=[
+        create_option(
+            name="tag",
+            description="A tag for the pic",
+            option_type=3,
+            required=False
+        )
+    ]
+)
+async def _pic(ctx: SlashContext, tag: str = None):
+    params = [] if tag is None else [tag]
+
+    command = registry.get("pic")
+    await command(params, ctx)
+
+
+@slash.slash(
+    name="vote",
+    description=registry.get("vote").description,
+    guild_ids=constants.guild_ids,
+    options=[
+        create_option(
+            name="subject",
+            description="The subject of the vote",
+            option_type=3,
+            required=True
+        ),
+        create_option(
+            name="option1",
+            description="The option 1",
+            option_type=3,
+            required=True
+        ),
+        create_option(
+            name="option2",
+            description="The option 2",
+            option_type=3,
+            required=True
+        ),
+        create_option(
+            name="option3",
+            description="The option 3",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option4",
+            description="The option 4",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option5",
+            description="The option 5",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option6",
+            description="The option 6",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option7",
+            description="The option 7",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option8",
+            description="The option 8",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option9",
+            description="The option 9",
+            option_type=3,
+            required=False
+        ),
+        create_option(
+            name="option10",
+            description="The option 10",
+            option_type=3,
+            required=False
+        ),
+    ]
+)
+async def _vote(ctx: SlashContext, **kwargs):
+    params = [value for key, value in kwargs.items()]
+    print(params)
+
+    command = registry.get("vote")
+    await command(params, ctx)

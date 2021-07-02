@@ -188,7 +188,7 @@ async def getFuture(parameters, channel):
 
 @log_this
 @registry.register(
-    command="mortsy",
+    command="morsty",
     description="? ? ?"
 )
 async def morsty(_parameters, channel):
