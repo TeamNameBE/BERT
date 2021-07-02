@@ -32,7 +32,7 @@ class ReminderCog(commands.Cog):
         self.toBePinged = []
         self.near_events = loadNearFutureEvents()
 
-    def cog_unload(self) -> None:
+    def cog_unload(self):
         """Deletes the cog"""
         self.loader.cancel()
 
@@ -51,7 +51,7 @@ class ReminderCog(commands.Cog):
         return events_to_return
 
     @tasks.loop(seconds=2.0)
-    async def pinger(self) -> None:
+    async def pinger(self):
         """Pings the people targeted by a deathping command"""
         if len(self.toBePinged) != 0:
             await Bert.getInstance().wait_until_ready()
@@ -60,7 +60,7 @@ class ReminderCog(commands.Cog):
                 await channel.send("{} up".format(pinged))
 
     @tasks.loop(seconds=2.0)
-    async def getEvent(self) -> None:
+    async def getEvent(self):
         """Advertise the current events"""
         from src.utils import advertise_event
 
@@ -70,7 +70,7 @@ class ReminderCog(commands.Cog):
             await advertise_event(event, guild=guild)
 
     @tasks.loop(seconds=30.0)
-    async def loader(self) -> None:
+    async def loader(self):
         """Loads the near events every 30 seconds"""
         from src.utils import loadNearFutureEvents
         self.near_events = await sync_to_async(loadNearFutureEvents)()

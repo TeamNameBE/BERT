@@ -27,7 +27,7 @@ class CommandManager:
 
         self.client = client
 
-    async def execCommand(self, line, channel) -> None:
+    async def execCommand(self, line, channel):
         """Executes the given command if it exists
 
         Args:

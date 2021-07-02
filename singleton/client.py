@@ -28,11 +28,11 @@ class Bert(discord.Client):
         self.slash = SlashCommand(self, sync_commands=True)
         self.commandManager = CommandManager(self)
 
-    async def on_ready(self) -> None:
+    async def on_ready(self):
         """Function called when the bot is connected to the API"""
         print('Logged on as {0}!'.format(self.user))
 
-    async def on_message(self, message: discord.Message) -> None:
+    async def on_message(self, message: discord.Message):
         """Called when a message is sent womewhere the bot can access
 
         Args:
@@ -41,7 +41,7 @@ class Bert(discord.Client):
         if message.content and message.content[0] == "/":
             await self.commandManager.execCommand(message.content[1:], message.channel)
 
-    def run(self, token: str) -> None:
+    def run(self, token: str):
         """Sets the bot as only and ready to receive messages
 
         Args:

@@ -155,7 +155,7 @@ async def stopping(parameters, channel):
 @log_this
 @registry.register(
     command="getfuture",
-    description="Returns a list of future reminders"
+    description="Shows a list of future reminders"
 )
 async def getFuture(parameters, channel):
     """Returns the future events occuring in the given period of time

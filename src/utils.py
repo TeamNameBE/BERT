@@ -1,3 +1,5 @@
+import discord
+
 from datetime import datetime
 import datetime as dt
 from discord_slash import SlashContext
@@ -30,7 +32,7 @@ def createReminder(name: str, start_time, duration, people_to_remind, channel_id
     )
 
 
-def modifyReminder(name, server_id, field, value):
+def modifyReminder(name, server_id, field, value) -> dict:
     """Modifies the selected field of the selected reminer
 
     Args:
@@ -106,7 +108,7 @@ def modifyReminder(name, server_id, field, value):
     }
 
 
-def deleteReminder(name: str, server_id: str):
+def deleteReminder(name: str, server_id: str) -> dict:
     """Delets a reminder in the database
 
     Args:
@@ -125,7 +127,7 @@ def deleteReminder(name: str, server_id: str):
     return {"error": False, "msg": f"Bert a supprimé événement '{name}'"}
 
 
-def getFutureEvents(name: str, value: str, guild: str):
+def getFutureEvents(name: str, value: str, guild: str) -> list:
     """Returns the events in the given period of time from the given server
 
     Args:
@@ -165,7 +167,7 @@ def getFutureEvents(name: str, value: str, guild: str):
     return [reminder.serialized for reminder in reminders]
 
 
-def loadNearFutureEvents():
+def loadNearFutureEvents() -> list:
     """Loads every event that starts in less than 5 minutes"""
     return Reminder.objects.filter(
         start_time__gte=timezone.now() - timezone.timedelta(minutes=5),
@@ -198,7 +200,7 @@ async def displayResult(channel, result):
         await channel.send(result["msg"])
 
 
-def _asChannel(channel):
+def _asChannel(channel) -> discord.channel:
     if type(channel) is SlashContext:
         return channel.channel
     return channel
