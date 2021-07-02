@@ -235,7 +235,6 @@ async def hjelp(parameters, channel):
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
     """
-
     if len(parameters) >= 1:
         for command in parameters:
             if (commandWrapper := registry.get(command)) is not None:
