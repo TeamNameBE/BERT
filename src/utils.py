@@ -1,9 +1,15 @@
+import discord
+import re
+from django.utils import timezone
 from datetime import datetime
 import datetime as dt
-from django.utils import timezone
-from db.models import Reminder
 
-from src.decorators import log_this
+from discord_slash import SlashContext
+
+from db.models import Reminder
+from exceptions.bad_format_exception import BadFormatException
+from decorators.log_this import log_this
+from singleton.cog import ReminderCog
 
 
 def createReminder(name: str, start_time, duration, people_to_remind, channel_id, server_id):
@@ -28,7 +34,7 @@ def createReminder(name: str, start_time, duration, people_to_remind, channel_id
     )
 
 
-def modifyReminder(name, server_id, field, value, cog):
+def modifyReminder(name, server_id, field, value) -> dict:
     """Modifies the selected field of the selected reminer
 
     Args:
@@ -36,7 +42,6 @@ def modifyReminder(name, server_id, field, value, cog):
         server_id (str): The id of the server inn which to modify the reminder
         field (str): The name of the field to modify
         value (str): The new value for the field
-        cog (Cog): The cog that handles periodic events
 
     Returns:
         dict: A dictionnary containing the information of wether the modification went well or not
@@ -50,7 +55,7 @@ def modifyReminder(name, server_id, field, value, cog):
     if field == "start_date":
         try:
             value = datetime.strptime(value, "%d/%m/%Y %H:%M")
-        except Exception:
+        except ValueError:
             return {
                 "error": True,
                 "msg": f"Format pas correct : {value}",
@@ -80,7 +85,7 @@ def modifyReminder(name, server_id, field, value, cog):
         reminder.set_duration(duration)
 
     elif field == "channel":
-        guild = cog.bot.get_guild(server_id)
+        guild = ReminderCog.getInstance().bot.get_guild(server_id)
         channel = guild.get_channel(int(value[2:-1]))
         if channel is None:
             return {"error": True, "msg": f"Bert pas trouvé channel '{value}'"}
@@ -105,7 +110,7 @@ def modifyReminder(name, server_id, field, value, cog):
     }
 
 
-def deleteReminder(name: str, server_id: str):
+def deleteReminder(name: str, server_id: str) -> dict:
     """Delets a reminder in the database
 
     Args:
@@ -124,7 +129,7 @@ def deleteReminder(name: str, server_id: str):
     return {"error": False, "msg": f"Bert a supprimé événement '{name}'"}
 
 
-def getFutureEvents(name: str, value: str, guild: str):
+def getFutureEvents(name: str, value: str, guild: str) -> list:
     """Returns the events in the given period of time from the given server
 
     Args:
@@ -164,8 +169,12 @@ def getFutureEvents(name: str, value: str, guild: str):
     return [reminder.serialized for reminder in reminders]
 
 
-def loadNearFutureEvents():
-    """ Loads every event that starts in less than 5 minutes """
+def loadNearFutureEvents() -> list:
+    """Loads every event that starts in less than 5 minutes
+
+    Returns:
+        list: the list of reminders that will happen in less than five minutes
+    """
     return Reminder.objects.filter(
         start_time__gte=timezone.now() - timezone.timedelta(minutes=5),
         start_time__lt=timezone.now() + timezone.timedelta(minutes=5),
@@ -187,3 +196,60 @@ async def advertise_event(event, guild):
     )
     if event.dp_participants:
         await channel.send(f"/deathping {event.role_to_remind}")
+
+
+@log_this
+async def displayResult(channel: discord.channel, result: dict):
+    """Sends the result of a command in the channel
+
+    Args:
+        channel (discord.channel): The channel in which to send the message
+        result (dict): The result in which to take the message
+    """
+    if result["error"]:
+        await channel.send(f"**{result['msg']}**")
+    else:
+        await channel.send(result["msg"])
+
+
+def _asChannel(channel) -> discord.channel:
+    """Ensure the use of discord.channel type variable
+
+    Args:
+        channel (discord.channel|SlashContext): Either a channel or a SlashContext
+
+    Returns:
+        discord.channel: The channel corresponding
+    """
+    if type(channel) is SlashContext:
+        return channel.channel
+    return channel
+
+
+def parseVote(params, slash_command: bool = False) -> list:
+    """Parses the arguments for the vote function
+
+    Args:
+        params (list): The list of arguments
+        slash_command (bool, optional): Whether the command used is a slash command or not. Defaults to False.
+
+    Raises:
+        BadFormatException: In case the arguments do not follow the regex
+
+    Returns:
+        list: a list of parsed parameters
+    """
+    if slash_command:
+        return params
+
+    parameters = " ".join(params)
+    vote_regex = '^"([a-zA-Z0-9?!\'éèàù\\-_ ])+"( "([a-zA-Z0-9?!\'éèàù\\-_ ])+"){1,10}$'
+
+    if not re.match(vote_regex, parameters):
+        raise BadFormatException(
+            "Commande pas correcte, doit convenir à\n```re\n{}```\n(Exemple) : `{}`".format(
+                vote_regex, '/vote "Ca va ?" "Oui" "Non"'
+            )
+        )
+
+    return re.findall(r'"(.*?)"', parameters)
