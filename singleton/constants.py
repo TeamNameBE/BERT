@@ -19,5 +19,5 @@ class Constants:
             raise Exception("This class is a singleton")
         Constants.instance = self
 
-        self.guild_ids = [789136699477065748]
+        self.guild_ids = [789136699477065748, 806161652277837955, 829689370247430181, 755154529401438339]
         self.deathping_gif = "https://tenor.com/bih59.gif"
