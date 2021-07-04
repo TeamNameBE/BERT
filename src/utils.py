@@ -154,7 +154,7 @@ def getFutureEvents(name: str, value: str, guild: str) -> list:
                 timezone.now() + timezone.timedelta(days=value),
             ]
         ).order_by("start_time")
-    elif name == "week":
+    elif name == "weeks":
         reminders = Reminder.objects.filter(
             start_time__range=[
                 timezone.now(),
