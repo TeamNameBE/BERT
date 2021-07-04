@@ -1,10 +1,21 @@
-from web.routes.utils import app
-from quart import Quart, redirect, url_for, render_template, request
+from quart import Quart
+
+from singleton.client import Bert
 
 
 app = Quart(__name__)
 
 
-@app.route("/")
-async def home():
-    return await render_template("index.html")
+@app.route("/api/servers/list")
+async def server_list():
+    client = Bert.getInstance()
+    servers = []
+
+    for guild in client.guilds:
+        servers.append({
+                "name": guild.name,
+                "id": guild.id,
+                "icon": str(guild.icon_url)
+            })
+
+    return {"servers": servers}
