@@ -252,7 +252,7 @@ async def hjelp(parameters, channel):
 @log_this
 @registry.register(
     command="pic",
-    decription="Shows a random image with the given tags",
+    description="Shows a random image with the given tags",
     help="[tag]"
 )
 async def pic(parameters, channel):
