@@ -5,3 +5,4 @@ emoji
 psycopg2-binary
 quart
 requests
+discord-py-slash-command

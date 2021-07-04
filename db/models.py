@@ -5,6 +5,8 @@ from django.utils import timezone
 
 
 class Reminder(models.Model):
+    """The reminder objects used to retain reminder informations, dates etc"""
+
     name = models.CharField(max_length=150, default="none", unique=True)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
@@ -15,7 +17,7 @@ class Reminder(models.Model):
     dp_participants = models.BooleanField(default=False)
 
     @property
-    def isNow(self):
+    def isNow(self) -> bool:
         """Whether the event should be advertised now or not
 
         Returns:
@@ -24,7 +26,7 @@ class Reminder(models.Model):
         return (timezone.now() >= self.start_time) and not self.advertised
 
     @property
-    def duration(self):
+    def duration(self) -> int:
         """Returns the duration of the event
 
         Returns:
@@ -33,7 +35,7 @@ class Reminder(models.Model):
         return self.end_time - self.start_time
 
     @property
-    def serialized(self):
+    def serialized(self) -> dict:
         """Returns a serialized version of the event
 
         Returns:
