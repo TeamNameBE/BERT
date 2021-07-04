@@ -38,13 +38,17 @@ async def addReminder(parameters, channel):
         parameters (list): The list of parameters required for the command to work
         channel (discord.channel): The channel in which the command has been done
     """
-    start_time = datetime.strptime(
-        "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
-    )
-    name = parameters[2].lower()
+    try:
+        start_time = datetime.strptime(
+            "{} {}".format(parameters[0], parameters[1]), "%d/%m/%Y %H:%M"
+        )
+        name = parameters[2].lower()
 
-    hours, minutes = parameters[3].split(":")
-    duration = dt.timedelta(hours=int(hours), minutes=int(minutes))
+        hours, minutes = parameters[3].split(":")
+        duration = dt.timedelta(hours=int(hours), minutes=int(minutes))
+    except ValueError as e:
+        await channel.send("Valeur pas valide :", e)
+        return
 
     people_to_remind = " ".join(parameters[4:])
 
