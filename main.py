@@ -13,12 +13,14 @@ def main():
         Exception: In case the API KEY is missing
     """
     from singleton.client import Bert
+    from singleton.cog import ReminderCog
 
     API_KEY = os.environ.get("API_KEY", "")
     if API_KEY == "":
         raise Exception("You must specify an API key")
 
     client = Bert.getInstance()
+    ReminderCog.getInstance()  # Start the cog
 
     client.run(API_KEY)
 
