@@ -1,3 +1,6 @@
+import os
+
+
 class Constants:
     """The singleton registering the constant"""
 
@@ -19,5 +22,5 @@ class Constants:
             raise Exception("This class is a singleton")
         Constants.instance = self
 
-        self.guild_ids = [789136699477065748, 806161652277837955, 829689370247430181, 755154529401438339]
+        self.guild_ids = [int(server_id) for server_id in os.environ.get("SERVERS", None).split(" ")]
         self.deathping_gif = "https://tenor.com/bih59.gif"
