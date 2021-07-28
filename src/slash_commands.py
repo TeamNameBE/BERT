@@ -14,7 +14,6 @@ constants = Constants.getInstance()
 @slash.slash(
     name="help",
     description="Displays help messages",
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="command",
@@ -42,7 +41,6 @@ async def _help(ctx: SlashContext, command: str = None):
 @slash.slash(
     name="addreminder",
     description="creates a reminder at the given date that concerns the mentionned role/user",
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="date",
@@ -95,7 +93,6 @@ async def _addreminder(ctx: SlashContext, date: str, hour: str, name: str, durat
 @slash.slash(
     name="delreminder",
     description="Deletes a reminder",
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="name",
@@ -120,7 +117,6 @@ async def _delreminder(ctx: SlashContext, name: str):
 @slash.slash(
     name="modreminder",
     description="Modifies a reminder",
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="name",
@@ -181,7 +177,6 @@ async def _modReminder(ctx: SlashContext, name: str, field: str, value: str):
 @slash.slash(
     name="deathping",
     description=registry.get("deathping").description,
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="user",
@@ -206,7 +201,6 @@ async def _deathping(ctx: SlashContext, user: discord.Member):
 @slash.slash(
     name="stopping",
     description=registry.get("stopping").description,
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="user",
@@ -231,7 +225,6 @@ async def _stopping(ctx: SlashContext, user: discord.Member):
 @slash.slash(
     name="getfuture",
     description="Shows the event occuring on the given amout of time",
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="time",
@@ -277,7 +270,6 @@ async def _getFuture(ctx: SlashContext, time: str = "weeks", amount: int = 1):
 @slash.slash(
     name="morsty",
     description="? ? ?",
-    guild_ids=constants.guild_ids
 )
 async def _morsty(ctx: SlashContext):
     """The slash command for the morsty
@@ -292,7 +284,6 @@ async def _morsty(ctx: SlashContext):
 @slash.slash(
     name="pic",
     description=registry.get("pic").description,
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="tag",
@@ -318,7 +309,6 @@ async def _pic(ctx: SlashContext, tag: str = None):
 @slash.slash(
     name="vote",
     description=registry.get("vote").description,
-    guild_ids=constants.guild_ids,
     options=[
         create_option(
             name="subject",
