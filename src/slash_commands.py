@@ -4,11 +4,9 @@ from discord_slash.utils.manage_commands import create_option, create_choice
 
 from singleton.client import Bert
 from singleton.command_registry import CommandRegistry
-from singleton.constants import Constants
 
 slash = Bert.getInstance().slash
 registry = CommandRegistry.getInstance()
-constants = Constants.getInstance()
 
 
 @slash.slash(
