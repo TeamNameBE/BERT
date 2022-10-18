@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "bert"
+version = "0.7.1"
+description = "A Bot Excelling in Reminding Things"
+authors = ["Minigrim0 <grimauflorent@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^3.1.6"
+"discord.py" = "^1.5.1"
+emoji = "^1.2.0"
+discord-py-slash-command = "^2.0.4"
+psycopg2-binary = "^2.8.6"
+pytz = "^2022.4"
+requests = "^2.28.1"
+
+[tool.poetry.group.dev.dependencies]
+pyproject-flake8 = "^5.0.4.post1"
+black = "^22.10.0"
+isort = "^5.10.1"
+
+[tool.flake8]
+max-line-length = 119
+extend-ignore = "E501,F401"
+max-complexity = 10
+
+[tool.black]
+line-length = 119
+exclude = '^.git|^*/migrations/*'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
